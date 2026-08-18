@@ -1,0 +1,131 @@
+---
+import ArticleCard from "./ArticleCard.astro";
+import japaneseStudyImage from "../assets/images/articles/japanese-study.jpg";
+import japanWorkImage from "../assets/images/articles/japan-work.jpg";
+import tainanTripImage from "../assets/images/articles/tainan-trip.jpg";
+
+const stories = [
+  {
+    title: "JLPT N2 自學準備方法",
+    excerpt: "整理我的 N2 準備計畫、使用教材與實際學習方式。",
+    category: "日文學習",
+    date: "2026.08.14",
+    readTime: "8 min read",
+    href: "/language/japanese/jlpt-n2/",
+    image: japaneseStudyImage,
+    imageAlt: "日文學習筆記與教材",
+    accent: "var(--color-language)",
+  },
+  {
+    title: "在日本的第一份工作",
+    excerpt: "記錄 Working Holiday 期間第一次工作的經驗與心得。",
+    category: "日本生活",
+    date: "2026.08.10",
+    readTime: "6 min read",
+    href: "/japan-wh/first-job/",
+    image: japanWorkImage,
+    imageAlt: "日本生活街景",
+    accent: "var(--color-japan)",
+  },
+  {
+    title: "台南兩天一夜行程",
+    excerpt: "慢慢走、慢慢吃，在老城裡安排一趟舒服的小旅行。",
+    category: "台灣旅行",
+    date: "2026.08.05",
+    readTime: "7 min read",
+    href: "/taiwan/tainan/2-days/",
+    image: tainanTripImage,
+    imageAlt: "台南旅行街景",
+    accent: "var(--color-taiwan)",
+  },
+];
+---
+
+<section class="section latest-stories">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">JOURNAL</p>
+        <h2>Latest Stories</h2>
+      </div>
+
+      <a href="/articles/" class="view-all">
+        VIEW ALL
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="article-grid">
+      {
+        stories.map((story) => (
+          <ArticleCard {...story} />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-header {
+    margin-bottom: var(--space-4);
+
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .section-eyebrow {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .section-header h2 {
+    margin: 0;
+  }
+
+  .view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+
+    color: var(--color-japan);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .view-all span {
+    transition: transform var(--transition-base);
+  }
+
+  .view-all:hover span {
+    transform: translateX(4px);
+  }
+
+  .article-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 900px) {
+    .article-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .section-header {
+      align-items: start;
+      flex-direction: column;
+    }
+
+    .article-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

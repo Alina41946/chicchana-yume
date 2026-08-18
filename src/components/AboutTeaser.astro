@@ -1,0 +1,92 @@
+<section class="section about-teaser">
+  <div class="container about-inner">
+    <div class="about-image">
+      <span>ABOUT IMAGE</span>
+    </div>
+
+    <div class="about-content">
+      <p class="section-eyebrow">ABOUT</p>
+
+      <h2>Hello, I'm Hemi.</h2>
+
+      <p>
+        學習語言、旅行、設計與生活，
+        記錄每一步，也記錄那些慢慢實現的小小夢想。
+      </p>
+
+      <a href="/about/" class="about-link">
+        ABOUT ME
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-inner {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .about-image {
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-items: center;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .section-eyebrow {
+    margin-bottom: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .about-content h2 {
+    margin-bottom: var(--space-2);
+  }
+
+  .about-content p {
+    max-width: 520px;
+    color: var(--color-text-muted);
+  }
+
+  .about-link {
+    display: inline-flex;
+    gap: var(--space-1);
+    align-items: center;
+
+    margin-top: var(--space-2);
+
+    color: var(--color-japan);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .about-link span {
+    transition: transform var(--transition-base);
+  }
+
+  .about-link:hover span {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 767px) {
+    .about-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .about-image {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

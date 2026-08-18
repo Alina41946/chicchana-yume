@@ -1,0 +1,68 @@
+:root {
+  /* =========================
+     Colors
+  ========================= */
+
+  --color-bg: #faf8f3;
+  --color-surface: #f1eee7;
+  --color-border: #e6e3da;
+
+  --color-text: #1a1a1a;
+  --color-text-muted: #6b7280;
+
+  --color-japan: #d95f5f;
+  --color-taiwan: #4daa9b;
+  --color-language: #5d8cec;
+  --color-travel: #e9c46a;
+  --color-works: #667280;
+
+  /* =========================
+     Spacing
+  ========================= */
+
+  --space-1: 0.5rem; /* 8px */
+  --space-2: 1rem; /* 16px */
+  --space-3: 1.5rem; /* 24px */
+  --space-4: 2rem; /* 32px */
+  --space-5: 3rem; /* 48px */
+  --space-6: 4rem; /* 64px */
+  --space-7: 6rem; /* 96px */
+  --space-8: 8rem; /* 128px */
+
+  /* =========================
+     Layout
+  ========================= */
+
+  --container-width: 1200px;
+  --page-padding: 3rem;
+
+  /* =========================
+     Typography
+  ========================= */
+
+  --font-serif: 'Noto Serif TC', 'Noto Serif JP', serif;
+
+  --font-sans: 'Noto Sans TC', 'Noto Sans JP', 'Noto Sans KR', sans-serif;
+
+  --font-display: 'Playfair Display', 'Noto Serif TC', serif;
+
+  /* =========================
+     Transition
+  ========================= */
+
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+}
+
+@media (max-width: 1199px) {
+  :root {
+    --page-padding: 2rem;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --page-padding: 1.25rem;
+  }
+}

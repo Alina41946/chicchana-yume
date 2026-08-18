@@ -1,0 +1,128 @@
+<section class="newsletter">
+  <div class="container">
+    <div class="newsletter-box">
+      <div>
+        <p class="newsletter-eyebrow">LETTER FROM MY JOURNAL</p>
+
+        <h2>Stay a little longer.</h2>
+
+        <p>
+          偶爾分享新的語言學習、旅行紀錄與設計故事。
+        </p>
+      </div>
+
+      <form class="newsletter-form">
+        <label for="newsletter-email">
+          Email
+        </label>
+
+        <div class="form-row">
+          <input
+            id="newsletter-email"
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+          />
+
+          <button type="submit">
+            SUBSCRIBE
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .newsletter {
+    padding-block: var(--space-6);
+  }
+
+  .newsletter-box {
+    padding: var(--space-5);
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+    align-items: center;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+  }
+
+  .newsletter-eyebrow {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-japan);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .newsletter-box h2 {
+    margin-bottom: var(--space-1);
+  }
+
+  .newsletter-box p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .newsletter-form label {
+    display: block;
+    margin-bottom: var(--space-1);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
+
+  .form-row input {
+    min-width: 0;
+    height: 48px;
+    padding-inline: var(--space-2);
+
+    border: 1px solid var(--color-border);
+    border-right: 0;
+
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .form-row button {
+    min-height: 48px;
+    padding-inline: var(--space-3);
+
+    border: 0;
+    background: var(--color-text);
+    color: var(--color-bg);
+
+    cursor: pointer;
+
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 767px) {
+    .newsletter-box {
+      grid-template-columns: 1fr;
+      padding: var(--space-4);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-1);
+    }
+
+    .form-row input {
+      border-right: 1px solid var(--color-border);
+    }
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+import CategoryCard from "./CategoryCard.astro";
+
+const categories = [
+  {
+    number: "01",
+    title: "LANGUAGE",
+    subtitle: "日文・韓文自學與學習紀錄",
+    href: "/language/",
+    accent: "var(--color-language)",
+  },
+  {
+    number: "02",
+    title: "JAPAN WH",
+    subtitle: "一年日本打工度假與生活紀錄",
+    href: "/japan-wh/",
+    accent: "var(--color-japan)",
+  },
+  {
+    number: "03",
+    title: "TAIWAN",
+    subtitle: "台灣旅行、城市散步與地方探索",
+    href: "/taiwan/",
+    accent: "var(--color-taiwan)",
+  },
+  {
+    number: "04",
+    title: "WORKS",
+    subtitle: "Web、UI、Graphic 與設計作品",
+    href: "/works/",
+    accent: "var(--color-works)",
+  },
+];
+---
+
+<section id="explore" class="section explore-section">
+  <div class="container">
+    <div class="section-heading">
+      <p class="section-eyebrow">EXPLORE</p>
+      <h2>Explore My World</h2>
+    </div>
+
+    <div class="category-grid">
+      {
+        categories.map((category) => (
+          <CategoryCard {...category} />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-heading {
+    margin-bottom: var(--space-4);
+  }
+
+  .section-eyebrow {
+    margin-bottom: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .section-heading h2 {
+    margin-bottom: 0;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 900px) {
+    .category-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .category-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

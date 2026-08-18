@@ -1,0 +1,121 @@
+---
+import ProjectCard from "./ProjectCard.astro";
+import personalWebsiteImage from "../assets/images/works/personal-website.jpg";
+import landingPageImage from "../assets/images/works/landing-page.jpg";
+import campaignVisualImage from "../assets/images/works/campaign-visual.jpg";
+
+const projects = [
+  {
+    title: "Personal Website",
+    category: "WEB DESIGN / UI UX",
+    year: "2026",
+    href: "/works/personal-website/",
+    image: personalWebsiteImage,
+imageAlt: "個人網站設計畫面",
+  },
+  {
+    title: "Landing Page Design",
+    category: "WEB DESIGN",
+    year: "2026",
+    href: "/works/landing-page/",
+    image: landingPageImage,
+imageAlt: "個人網站設計畫面",
+  },
+  {
+    title: "Campaign Visual Design",
+    category: "GRAPHIC DESIGN",
+    year: "2026",
+    href: "/works/campaign-visual/",
+    image: campaignVisualImage,
+imageAlt: "個人網站設計畫面",
+  },
+];
+---
+
+<section class="section works-section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">PORTFOLIO</p>
+        <h2>Selected Works</h2>
+      </div>
+
+      <a href="/works/" class="view-all">
+        VIEW ALL WORKS
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="project-grid">
+      {
+        projects.map((project) => (
+          <ProjectCard {...project} />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-header {
+    margin-bottom: var(--space-4);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: var(--space-3);
+  }
+
+  .section-eyebrow {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .section-header h2 {
+    margin: 0;
+  }
+
+  .view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+
+    color: var(--color-works);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .view-all span {
+    transition: transform var(--transition-base);
+  }
+
+  .view-all:hover span {
+    transform: translateX(4px);
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+  }
+
+  @media (max-width: 900px) {
+    .project-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .section-header {
+      align-items: start;
+      flex-direction: column;
+    }
+
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

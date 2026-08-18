@@ -1,0 +1,221 @@
+---
+import TravelCard from "./TravelCard.astro";
+import tainanImage from "../assets/images/travel/tainan.jpg";
+import keelungImage from "../assets/images/travel/keelung.jpg";
+
+const destinations = [
+  {
+    title: "台南兩天一夜",
+    location: "TAINAN",
+    excerpt: "慢慢走、慢慢吃，在老城裡安排一趟舒服的小旅行。",
+    href: "/taiwan/tainan/2-days/",
+    image: tainanImage,
+    imageAlt: "台南老城旅行街景",
+  },
+  {
+    title: "基隆雨天散步",
+    location: "KEELUNG",
+    excerpt: "港口、老街與雨天，記錄一座城市安靜的樣子。",
+    href: "/taiwan/keelung/rainy-day/",
+    image: keelungImage,
+    imageAlt: "基隆港口與城市街景",
+  },
+];
+---
+
+<section class="section taiwan-section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">EXPLORE TAIWAN</p>
+        <h2>Travel Around Taiwan</h2>
+      </div>
+
+      <a href="/taiwan/" class="view-all">
+        EXPLORE TAIWAN
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <div class="taiwan-layout">
+      <div class="taiwan-feature">
+        <div class="taiwan-map-placeholder">
+          <span>TAIWAN MAP / FEATURE IMAGE</span>
+        </div>
+
+        <div class="region-links">
+          <a href="/taiwan/north/">NORTH</a>
+          <a href="/taiwan/central/">CENTRAL</a>
+          <a href="/taiwan/south/">SOUTH</a>
+          <a href="/taiwan/east/">EAST</a>
+          <a href="/taiwan/islands/">ISLANDS</a>
+        </div>
+      </div>
+
+      <div class="travel-grid">
+        {
+          destinations.map((destination) => (
+            <TravelCard {...destination} />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .section-header {
+    margin-bottom: var(--space-4);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: var(--space-3);
+  }
+
+  .section-eyebrow {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .section-header h2 {
+    margin: 0;
+  }
+
+  .view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+
+    color: var(--color-taiwan);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .view-all span {
+    transition: transform var(--transition-base);
+  }
+
+  .view-all:hover span {
+    transform: translateX(4px);
+  }
+
+  /* =========================
+     Desktop
+     Map | Card | Card
+  ========================= */
+
+  .taiwan-layout {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1.15fr)
+      minmax(0, 1.85fr);
+
+    gap: var(--space-3);
+    align-items: start;
+  }
+
+  .taiwan-feature {
+    min-width: 0;
+  }
+
+  .taiwan-map-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+
+    display: grid;
+    place-items: center;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .region-links {
+    margin-top: var(--space-2);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .region-links a {
+    color: var(--color-taiwan);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .travel-grid {
+    min-width: 0;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  /* =========================
+     Medium
+     Map
+     Card | Card
+  ========================= */
+
+  @media (max-width: 1100px) {
+    .taiwan-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .taiwan-map-placeholder {
+      aspect-ratio: 16 / 9;
+    }
+
+    .travel-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* =========================
+     Mobile
+     Map
+     Card
+     Card
+  ========================= */
+
+  @media (max-width: 767px) {
+    .section-header {
+      align-items: start;
+      flex-direction: column;
+    }
+
+    .taiwan-map-placeholder {
+      aspect-ratio: 4 / 3;
+    }
+
+    .travel-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .region-links {
+      overflow-x: auto;
+      flex-wrap: nowrap;
+
+      padding-bottom: var(--space-1);
+
+      scrollbar-width: none;
+    }
+
+    .region-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    .region-links a {
+      flex: 0 0 auto;
+    }
+  }
+</style>

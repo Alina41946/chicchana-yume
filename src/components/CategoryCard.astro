@@ -1,0 +1,90 @@
+---
+interface Props {
+  number: string;
+  title: string;
+  subtitle: string;
+  href: string;
+  accent: string;
+}
+
+const {
+  number,
+  title,
+  subtitle,
+  href,
+  accent,
+} = Astro.props;
+---
+
+<a class="category-card" href={href} style={`--accent:${accent};`}>
+  <span class="category-number">{number}</span>
+
+  <div>
+    <h3>{title}</h3>
+    <p>{subtitle}</p>
+  </div>
+
+  <span class="category-link">
+    EXPLORE
+    <span aria-hidden="true">→</span>
+  </span>
+</a>
+
+<style>
+  .category-card {
+    min-height: 220px;
+    padding: var(--space-3);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+
+    transition:
+      transform var(--transition-base),
+      border-color var(--transition-base);
+  }
+
+  .category-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+  }
+
+  .category-number {
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+  }
+
+  .category-card h3 {
+    margin-bottom: var(--space-1);
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+  }
+
+  .category-card p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .category-link {
+    display: inline-flex;
+    gap: var(--space-1);
+    align-items: center;
+
+    color: var(--accent);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .category-link span {
+    transition: transform var(--transition-base);
+  }
+
+  .category-card:hover .category-link span {
+    transform: translateX(4px);
+  }
+</style>

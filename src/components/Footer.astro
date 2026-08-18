@@ -1,0 +1,126 @@
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <p class="brand-name">
+        ちっちゃな私には、<br />
+        ちっちゃな夢があります。
+      </p>
+
+      <p class="footer-description">
+        語言學習、日本一年打工度假、台灣旅遊與設計作品的個人網站。
+      </p>
+    </div>
+
+    <div class="footer-links">
+      <div>
+        <h2>EXPLORE</h2>
+        <ul>
+          <li><a href="/language/">Language</a></li>
+          <li><a href="/japan-wh/">Japan WH</a></li>
+          <li><a href="/taiwan/">Taiwan</a></li>
+          <li><a href="/works/">Works</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2>INFORMATION</h2>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2>LEGAL</h2>
+        <ul>
+          <li><a href="/privacy/">Privacy Policy</a></li>
+          <li><a href="/sitemap/">Sitemap</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <small>© 2026 ちっちゃな夢. All rights reserved.</small>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-7);
+    padding-block: var(--space-6) var(--space-3);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1.4fr 2fr;
+    gap: var(--space-6);
+  }
+
+  .brand-name {
+    margin-bottom: var(--space-2);
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .footer-description {
+    max-width: 360px;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+
+  .footer-links h2 {
+    margin-bottom: var(--space-2);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+
+  .footer-links ul {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .footer-links a {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    transition: color var(--transition-base);
+  }
+
+  .footer-links a:hover {
+    color: var(--color-text);
+  }
+
+  .footer-bottom {
+    margin-top: var(--space-5);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 767px) {
+    .site-footer {
+      margin-top: var(--space-6);
+    }
+
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .footer-links {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+  }
+</style>
