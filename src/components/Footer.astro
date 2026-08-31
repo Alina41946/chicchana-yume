@@ -1,3 +1,7 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-brand">
@@ -15,27 +19,27 @@
       <div>
         <h2>EXPLORE</h2>
         <ul>
-          <li><a href="/language/">Language</a></li>
-          <li><a href="/japan-wh/">Japan WH</a></li>
-          <li><a href="/taiwan/">Taiwan</a></li>
-          <li><a href="/works/">Works</a></li>
-        </ul>
+  <li><a href={`${base}language/`}>Language</a></li>
+  <li><a href={`${base}japan-wh/`}>Japan WH</a></li>
+  <li><a href={`${base}taiwan/`}>Taiwan</a></li>
+  <li><a href={`${base}works/`}>Works</a></li>
+</ul>
       </div>
 
       <div>
         <h2>INFORMATION</h2>
         <ul>
-          <li><a href="/about/">About</a></li>
-          <li><a href="/contact/">Contact</a></li>
-        </ul>
+  <li><a href={`${base}about/`}>About</a></li>
+  <li><a href={`${base}contact/`}>Contact</a></li>
+</ul>
       </div>
 
       <div>
         <h2>LEGAL</h2>
         <ul>
-          <li><a href="/privacy/">Privacy Policy</a></li>
-          <li><a href="/sitemap/">Sitemap</a></li>
-        </ul>
+  <li><a href={`${base}privacy/`}>Privacy Policy</a></li>
+  <li><a href={`${base}sitemap/`}>Sitemap</a></li>
+</ul>
       </div>
     </div>
   </div>

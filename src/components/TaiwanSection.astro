@@ -1,33 +1,32 @@
 ---
+import { getCollection } from "astro:content";
 import TravelCard from "./TravelCard.astro";
-import tainanImage from "../assets/images/travel/tainan.jpg";
-import keelungImage from "../assets/images/travel/keelung.jpg";
 
-const destinations = [
-  {
-    title: "台南兩天一夜",
-    location: "TAINAN",
-    excerpt: "慢慢走、慢慢吃，在老城裡安排一趟舒服的小旅行。",
-    href: "/taiwan/tainan/2-days/",
-    image: tainanImage,
-    imageAlt: "台南老城旅行街景",
-  },
-  {
-    title: "基隆雨天散步",
-    location: "KEELUNG",
-    excerpt: "港口、老街與雨天，記錄一座城市安靜的樣子。",
-    href: "/taiwan/keelung/rainy-day/",
-    image: keelungImage,
-    imageAlt: "基隆港口與城市街景",
-  },
-];
+const posts = await getCollection(
+  "blog",
+  ({ data }) =>
+    !data.draft &&
+    data.category === "taiwan"
+);
+
+const taiwanPosts = posts
+  .sort(
+    (a, b) =>
+      b.data.publishedDate.getTime() -
+      a.data.publishedDate.getTime()
+  )
+  .slice(0, 2);
 ---
 
 <section class="section taiwan-section">
   <div class="container">
+
     <div class="section-header">
       <div>
-        <p class="section-eyebrow">EXPLORE TAIWAN</p>
+        <p class="section-eyebrow">
+          EXPLORE TAIWAN
+        </p>
+
         <h2>Travel Around Taiwan</h2>
       </div>
 
@@ -38,56 +37,123 @@ const destinations = [
     </div>
 
     <div class="taiwan-layout">
+
       <div class="taiwan-feature">
+
         <div class="taiwan-map">
-  <div class="taiwan-map-title">
-    <span class="map-eyebrow">EXPLORE</span>
-    <strong>TAIWAN</strong>
-  </div>
 
-  <nav class="taiwan-regions" aria-label="台灣旅遊地區">
-    <a class="region north" href="/taiwan/north/">
-      <span class="region-en">NORTH</span>
-      <span class="region-zh">北部</span>
-    </a>
+          <div class="taiwan-map-title">
+            <span class="map-eyebrow">
+              EXPLORE
+            </span>
 
-    <a class="region central" href="/taiwan/central/">
-      <span class="region-en">CENTRAL</span>
-      <span class="region-zh">中部</span>
-    </a>
+            <strong>TAIWAN</strong>
+          </div>
 
-    <a class="region south" href="/taiwan/south/">
-      <span class="region-en">SOUTH</span>
-      <span class="region-zh">南部</span>
-    </a>
+         <nav
+  class="taiwan-regions"
+  aria-label="台灣旅遊地區"
+>
+  <a
+    class="region north"
+    href="/taiwan/?region=north"
+  >
+    <span class="region-en">
+      NORTH
+    </span>
 
-    <a class="region east" href="/taiwan/east/">
-      <span class="region-en">EAST</span>
-      <span class="region-zh">東部</span>
-    </a>
+    <span class="region-zh">
+      北部
+    </span>
+  </a>
 
-    <a class="region islands" href="/taiwan/islands/">
-      <span class="region-en">ISLANDS</span>
-      <span class="region-zh">離島</span>
-    </a>
-  </nav>
+  <a
+    class="region central"
+    href="/taiwan/?region=central"
+  >
+    <span class="region-en">
+      CENTRAL
+    </span>
 
-  <p class="map-note" aria-hidden="true">
-    little trips,<br />
-    around home.
-  </p>
-</div>
+    <span class="region-zh">
+      中部
+    </span>
+  </a>
 
-        
+  <a
+    class="region south"
+    href="/taiwan/?region=south"
+  >
+    <span class="region-en">
+      SOUTH
+    </span>
+
+    <span class="region-zh">
+      南部
+    </span>
+  </a>
+
+  <a
+    class="region east"
+    href="/taiwan/?region=east"
+  >
+    <span class="region-en">
+      EAST
+    </span>
+
+    <span class="region-zh">
+      東部
+    </span>
+  </a>
+
+  <a
+    class="region islands"
+    href="/taiwan/?region=islands"
+  >
+    <span class="region-en">
+      ISLANDS
+    </span>
+
+    <span class="region-zh">
+      離島
+    </span>
+  </a>
+</nav>
+
+          <p
+            class="map-note"
+            aria-hidden="true"
+          >
+            little trips,<br />
+            around home.
+          </p>
+
+        </div>
       </div>
 
-      <div class="travel-grid">
-        {
-          destinations.map((destination) => (
-            <TravelCard {...destination} />
-          ))
-        }
-      </div>
+      {
+        taiwanPosts.length > 0 ? (
+          <div class="travel-grid">
+            {
+              taiwanPosts.map((post) => (
+                <TravelCard
+                  title={post.data.title}
+                  location={post.data.location ?? "TAIWAN"}
+                  excerpt={post.data.description}
+                  href={`/${post.id.replace(/\.mdx?$/, "")}/`}
+                  image={post.data.image}
+                  imageAlt={post.data.imageAlt ?? ""}
+                />
+              ))
+            }
+          </div>
+        ) : (
+          <p class="empty-message">
+            台灣旅行的故事準備中。
+          </p>
+        )
+      }
+
     </div>
   </div>
 </section>
@@ -103,6 +169,7 @@ const destinations = [
     display: flex;
     justify-content: space-between;
     align-items: end;
+
     gap: var(--space-3);
   }
 
@@ -110,6 +177,7 @@ const destinations = [
     margin-bottom: var(--space-1);
 
     color: var(--color-text-muted);
+
     font-size: 0.75rem;
     letter-spacing: 0.15em;
   }
@@ -121,15 +189,18 @@ const destinations = [
   .view-all {
     display: inline-flex;
     align-items: center;
+
     gap: var(--space-1);
 
     color: var(--color-taiwan);
+
     font-size: 0.75rem;
     letter-spacing: 0.08em;
   }
 
   .view-all span {
-    transition: transform var(--transition-base);
+    transition:
+      transform var(--transition-base);
   }
 
   .view-all:hover span {
@@ -138,7 +209,6 @@ const destinations = [
 
   /* =========================
      Desktop Layout
-     Taiwan | Card | Card
   ========================= */
 
   .taiwan-layout {
@@ -149,6 +219,7 @@ const destinations = [
       minmax(0, 1.85fr);
 
     gap: var(--space-3);
+
     align-items: start;
   }
 
@@ -160,8 +231,17 @@ const destinations = [
     min-width: 0;
 
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
     gap: var(--space-3);
+  }
+
+  .empty-message {
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
   }
 
   /* =========================
@@ -169,20 +249,25 @@ const destinations = [
   ========================= */
 
   .taiwan-map {
-  position: relative;
+    position: relative;
 
-  min-height: 420px;
-  padding: var(--space-4);
+    min-height: 420px;
 
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+    padding: var(--space-4);
 
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
 
-  overflow: hidden;
-}
+    gap: var(--space-4);
+
+    background: var(--color-surface);
+
+    border:
+      1px solid
+      var(--color-border);
+
+    overflow: hidden;
+  }
 
   /* =========================
      Map Title
@@ -198,6 +283,7 @@ const destinations = [
     margin-bottom: var(--space-1);
 
     color: var(--color-taiwan);
+
     font-size: 0.7rem;
     letter-spacing: 0.16em;
   }
@@ -205,7 +291,9 @@ const destinations = [
   .taiwan-map-title strong {
     font-family: var(--font-display);
 
-    font-size: clamp(2.5rem, 4vw, 4.5rem);
+    font-size:
+      clamp(2.5rem, 4vw, 4.5rem);
+
     font-weight: 400;
     line-height: 1;
   }
@@ -215,45 +303,55 @@ const destinations = [
   ========================= */
 
   .taiwan-regions {
-  width: 100%;
+    width: 100%;
 
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2);
-}
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: var(--space-2);
+  }
 
   .region {
-  position: static;
+    position: static;
 
-  width: 100%;
-  min-width: 0;
-  padding: 0.65rem 0.85rem;
+    width: 100%;
+    min-width: 0;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-2);
+    padding: 0.65rem 0.85rem;
 
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-  transition:
-    transform var(--transition-base),
-    border-color var(--transition-base),
-    background var(--transition-base);
-}
+    gap: var(--space-2);
+
+    background: var(--color-bg);
+
+    border:
+      1px solid
+      var(--color-border);
+
+    transition:
+      transform var(--transition-base),
+      border-color var(--transition-base),
+      background var(--transition-base);
+  }
 
   .region:hover,
   .region:focus-visible {
     transform: translateY(-3px);
 
-    border-color: var(--color-taiwan);
+    border-color:
+      var(--color-taiwan);
 
-    background: color-mix(
-      in srgb,
-      var(--color-taiwan) 8%,
-      var(--color-bg)
-    );
+    background:
+      color-mix(
+        in srgb,
+        var(--color-taiwan) 8%,
+        var(--color-bg)
+      );
   }
 
   .region-en {
@@ -265,10 +363,10 @@ const destinations = [
 
   .region-zh {
     font-family: var(--font-serif);
+
     font-size: 0.9rem;
   }
 
-  
   /* =========================
      Handwritten Note
   ========================= */
@@ -291,14 +389,13 @@ const destinations = [
   }
 
   /* =========================
-     Medium
-     Taiwan
-     Card | Card
+     Tablet
   ========================= */
 
   @media (max-width: 1100px) {
     .taiwan-layout {
       grid-template-columns: 1fr;
+
       gap: var(--space-4);
     }
 
@@ -307,15 +404,13 @@ const destinations = [
     }
 
     .travel-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
     }
   }
 
   /* =========================
      Mobile
-     Taiwan
-     Card
-     Card
   ========================= */
 
   @media (max-width: 767px) {
@@ -326,28 +421,23 @@ const destinations = [
 
     .taiwan-map {
       min-height: auto;
+
       padding: var(--space-3);
 
-      grid-template-columns: 1fr;
       gap: var(--space-3);
     }
 
     .taiwan-map-title strong {
-      font-size: clamp(2.5rem, 13vw, 4rem);
+      font-size:
+        clamp(2.5rem, 13vw, 4rem);
     }
 
     .taiwan-regions {
-      width: 100%;
-      min-height: 0;
-
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--space-2);
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
     }
 
     .region {
-      position: static;
-
       min-width: 0;
       width: 100%;
     }

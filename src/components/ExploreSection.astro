@@ -1,33 +1,35 @@
 ---
 import CategoryCard from "./CategoryCard.astro";
 
+const base = import.meta.env.BASE_URL;
+
 const categories = [
   {
     number: "01",
     title: "LANGUAGE",
     subtitle: "日文・韓文自學與學習紀錄",
-    href: "/language/",
+    href: `${base}language/`,
     accent: "var(--color-language)",
   },
   {
     number: "02",
     title: "JAPAN WH",
     subtitle: "一年日本打工度假與生活紀錄",
-    href: "/japan-wh/",
+    href: `${base}japan-wh/`,
     accent: "var(--color-japan)",
   },
   {
     number: "03",
     title: "TAIWAN",
     subtitle: "台灣旅行、城市散步與地方探索",
-    href: "/taiwan/",
+    href: `${base}taiwan/`,
     accent: "var(--color-taiwan)",
   },
   {
     number: "04",
     title: "WORKS",
     subtitle: "Web、UI、Graphic 與設計作品",
-    href: "/works/",
+    href: `${base}works/`,
     accent: "var(--color-works)",
   },
 ];

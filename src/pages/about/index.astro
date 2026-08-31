@@ -1,0 +1,369 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="About｜ちっちゃな私には、ちっちゃな夢があります。"
+  description="關於我，以及這個網站為什麼存在。"
+>
+  <main class="about-page">
+
+    <section class="about-hero">
+      <div class="container about-hero-inner">
+
+        <div>
+          <p class="page-eyebrow">
+            ABOUT
+          </p>
+
+          <h1>
+            A little about me,
+            <br />
+            and the things
+            <br />
+            I care about.
+          </h1>
+        </div>
+
+        <div class="about-intro">
+          <p>
+            喜歡設計、語言與旅行，
+            也喜歡把一路學到的東西慢慢整理下來。
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="about-story">
+      <div class="container about-story-inner">
+
+        <div class="story-label">
+          <p>MY STORY</p>
+        </div>
+
+        <div class="story-content">
+
+          <p class="story-lead">
+            ちっちゃな私には、
+            <br />
+            ちっちゃな夢があります。
+          </p>
+
+          <p>
+            我從設計與影像開始，後來接觸網頁開發，
+            也一直持續學習語言。
+          </p>
+
+          <p>
+            對我來說，設計、程式、語言和旅行，
+            看起來是不同的事情，
+            但其實都是認識世界的一種方式。
+          </p>
+
+          <p>
+            這個網站就是把這些事情放在一起的地方。
+          </p>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section about-interests">
+      <div class="container">
+
+        <div class="section-header">
+          <p class="section-eyebrow">
+            WHAT I DO
+          </p>
+
+          <h2>Things I’m exploring</h2>
+        </div>
+
+        <div class="interest-grid">
+
+          <article class="interest-item">
+            <span class="interest-number">
+              01
+            </span>
+
+            <h3>Language</h3>
+
+            <p>
+              日文、韓文，以及語言學習過程中的筆記與方法。
+            </p>
+          </article>
+
+          <article class="interest-item">
+            <span class="interest-number">
+              02
+            </span>
+
+            <h3>Japan</h3>
+
+            <p>
+              Working Holiday、生活、旅行，以及一年裡遇見的人與風景。
+            </p>
+          </article>
+
+          <article class="interest-item">
+            <span class="interest-number">
+              03
+            </span>
+
+            <h3>Taiwan</h3>
+
+            <p>
+              城市散步、小旅行，以及重新認識生活周遭的地方。
+            </p>
+          </article>
+
+          <article class="interest-item">
+            <span class="interest-number">
+              04
+            </span>
+
+            <h3>Design & Development</h3>
+
+            <p>
+              UI、視覺設計、前端開發，以及把想法真正做出來的過程。
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+  .about-hero {
+    padding-block: var(--space-8);
+
+    border-bottom:
+      1px solid
+      var(--color-border);
+  }
+
+  .about-hero-inner {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1.4fr)
+      minmax(260px, 0.6fr);
+
+    align-items: end;
+
+    gap: var(--space-6);
+  }
+
+  .page-eyebrow,
+  .section-eyebrow,
+  .story-label p {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .about-hero h1 {
+    max-width: 850px;
+
+    margin-bottom: 0;
+
+    font-family: var(--font-display);
+
+    font-size:
+      clamp(3.5rem, 7vw, 6.5rem);
+
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+
+  .about-intro {
+    padding-bottom: 0.5rem;
+  }
+
+  .about-intro p {
+    max-width: 360px;
+
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
+  }
+
+  .about-story {
+    padding-block: var(--space-7);
+
+    border-bottom:
+      1px solid
+      var(--color-border);
+  }
+
+  .about-story-inner {
+    display: grid;
+
+    grid-template-columns:
+      180px
+      minmax(0, 680px);
+
+    justify-content: center;
+
+    gap: var(--space-6);
+  }
+
+  .story-label p {
+    margin-bottom: 0;
+  }
+
+  .story-content p {
+    color: var(--color-text-muted);
+  }
+
+  .story-lead {
+    margin-bottom: var(--space-4);
+
+    color: var(--color-text) !important;
+
+    font-family: var(--font-serif);
+
+    font-size: clamp(
+      1.6rem,
+      3vw,
+      2.4rem
+    );
+
+    line-height: 1.7;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-4);
+  }
+
+  .section-header h2 {
+    margin-bottom: 0;
+  }
+
+  .interest-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    border-top:
+      1px solid
+      var(--color-border);
+  }
+
+  .interest-item {
+    min-width: 0;
+
+    padding:
+      var(--space-4)
+      var(--space-4)
+      var(--space-5)
+      0;
+
+    border-bottom:
+      1px solid
+      var(--color-border);
+  }
+
+  .interest-item:nth-child(odd) {
+    border-right:
+      1px solid
+      var(--color-border);
+  }
+
+  .interest-item:nth-child(even) {
+    padding-left: var(--space-4);
+  }
+
+  .interest-number {
+    display: block;
+
+    margin-bottom: var(--space-3);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .interest-item h3 {
+    margin-bottom: var(--space-1);
+  }
+
+  .interest-item p {
+    max-width: 420px;
+
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
+
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 900px) {
+    .about-hero {
+      padding-block: var(--space-6);
+    }
+
+    .about-hero-inner {
+      grid-template-columns: 1fr;
+
+      gap: var(--space-4);
+    }
+
+    .about-story-inner {
+      grid-template-columns:
+        140px
+        minmax(0, 1fr);
+
+      gap: var(--space-4);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .about-hero {
+      padding-block: var(--space-5);
+    }
+
+    .about-hero h1 {
+      font-size:
+        clamp(3rem, 14vw, 4.25rem);
+    }
+
+    .about-story {
+      padding-block: var(--space-5);
+    }
+
+    .about-story-inner {
+      grid-template-columns: 1fr;
+
+      gap: var(--space-2);
+    }
+
+    .interest-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .interest-item,
+    .interest-item:nth-child(even) {
+      padding:
+        var(--space-3)
+        0
+        var(--space-4);
+    }
+
+    .interest-item:nth-child(odd) {
+      border-right: 0;
+    }
+  }
+</style>

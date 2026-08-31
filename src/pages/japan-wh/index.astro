@@ -1,0 +1,284 @@
+---
+import { getCollection } from "astro:content";
+
+import Layout from "../../layouts/Layout.astro";
+import ArticleList from "../../components/ArticleList.astro";
+
+const posts = await getCollection(
+  "blog",
+  ({ data }) =>
+    !data.draft &&
+    data.category === "japan-wh"
+);
+
+const japanPosts = posts.sort(
+  (a, b) =>
+    b.data.publishedDate.getTime() -
+    a.data.publishedDate.getTime()
+);
+---
+
+<Layout
+  title="Japan WH｜ちっちゃな私には、ちっちゃな夢があります。"
+  description="記錄日本 Working Holiday 的生活、旅行、文化體驗與日常。"
+>
+  <main class="japan-page">
+
+    <section class="japan-hero">
+      <div class="container japan-hero-inner">
+
+        <div class="japan-heading">
+          <p class="page-eyebrow">
+            JAPAN WORKING HOLIDAY
+          </p>
+
+          <h1>
+            365 days,
+            <br />
+            somewhere
+            <br />
+            in Japan.
+          </h1>
+        </div>
+
+        <div class="japan-intro">
+          <p>
+            記錄一年 Working Holiday 的生活，
+            從城市、旅行、祭典到那些普通卻想記住的日子。
+          </p>
+
+          <span class="post-count">
+            {String(japanPosts.length).padStart(2, "0")} STORIES
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="japan-about">
+      <div class="container japan-about-inner">
+
+        <p class="about-label">
+          ABOUT THIS JOURNEY
+        </p>
+
+        <div class="about-copy">
+          <p>
+            Working Holiday 對我來說，不只是到日本生活一年。
+          </p>
+
+          <p>
+            我想留下旅行途中看到的風景、
+            不同地方的生活方式，以及真正住在日本之後，
+            那些和旅遊時完全不同的日常。
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section japan-stories">
+      <div class="container">
+
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">
+              JOURNAL
+            </p>
+
+            <h2>Japan Stories</h2>
+          </div>
+
+          <span class="post-count">
+            {japanPosts.length} STORIES
+          </span>
+        </div>
+
+        <ArticleList
+          posts={japanPosts}
+          categoryLabel="日本生活"
+          accent="var(--color-japan)"
+          emptyMessage="日本 Working Holiday 的故事準備中。"
+        />
+
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+  .japan-hero {
+    padding-block: var(--space-8);
+
+    border-bottom: 1px solid
+      var(--color-border);
+  }
+
+  .japan-hero-inner {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1.4fr)
+      minmax(260px, 0.6fr);
+
+    align-items: end;
+
+    gap: var(--space-6);
+  }
+
+  .page-eyebrow,
+  .section-eyebrow,
+  .about-label {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .japan-heading h1 {
+    max-width: 780px;
+
+    margin-bottom: 0;
+
+    font-family: var(--font-display);
+
+    font-size: clamp(
+      3.5rem,
+      7vw,
+      6.5rem
+    );
+
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+  }
+
+  .japan-intro {
+    padding-bottom: 0.5rem;
+  }
+
+  .japan-intro p {
+    max-width: 360px;
+
+    margin-bottom: var(--space-3);
+
+    color: var(--color-text-muted);
+  }
+
+  .post-count {
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .japan-about {
+    padding-block: var(--space-6);
+
+    border-bottom: 1px solid
+      var(--color-border);
+  }
+
+  .japan-about-inner {
+    display: grid;
+
+    grid-template-columns:
+      180px
+      minmax(0, 680px);
+
+    justify-content: center;
+
+    gap: var(--space-6);
+  }
+
+  .about-label {
+    margin-bottom: 0;
+  }
+
+  .about-copy {
+    font-family: var(--font-serif);
+
+    font-size: 1.25rem;
+    line-height: 2;
+  }
+
+  .about-copy p:last-child {
+    margin-bottom: 0;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-4);
+
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+
+    gap: var(--space-3);
+  }
+
+  .section-header h2 {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 900px) {
+    .japan-hero {
+      padding-block: var(--space-6);
+    }
+
+    .japan-hero-inner {
+      grid-template-columns: 1fr;
+
+      gap: var(--space-4);
+    }
+
+    .japan-intro {
+      max-width: 520px;
+    }
+
+    .japan-about-inner {
+      grid-template-columns:
+        140px
+        minmax(0, 1fr);
+
+      gap: var(--space-4);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .japan-hero {
+      padding-block: var(--space-5);
+    }
+
+    .japan-heading h1 {
+      font-size: clamp(
+        3rem,
+        14vw,
+        4.25rem
+      );
+    }
+
+    .japan-about {
+      padding-block: var(--space-5);
+    }
+
+    .japan-about-inner {
+      grid-template-columns: 1fr;
+
+      gap: var(--space-2);
+    }
+
+    .about-copy {
+      font-size: 1.1rem;
+    }
+
+    .section-header {
+      align-items: start;
+      flex-direction: column;
+
+      gap: var(--space-1);
+    }
+  }
+</style>

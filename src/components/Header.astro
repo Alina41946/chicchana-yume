@@ -1,18 +1,20 @@
 ---
+const base = import.meta.env.BASE_URL;
+
 const navItems = [
-  { label: "HOME", href: "/" },
-  { label: "LANGUAGE", href: "/language/" },
-  { label: "JAPAN WH", href: "/japan-wh/" },
-  { label: "TAIWAN", href: "/taiwan/" },
-  { label: "WORKS", href: "/works/" },
-  { label: "ABOUT", href: "/about/" },
+  { label: "HOME", href: base },
+  { label: "LANGUAGE", href: `${base}language/` },
+  { label: "JAPAN WH", href: `${base}japan-wh/` },
+  { label: "TAIWAN", href: `${base}taiwan/` },
+  { label: "WORKS", href: `${base}works/` },
+  { label: "ABOUT", href: `${base}about/` },
 ];
 ---
 
 <header class="site-header">
   <div class="container header-inner">
 
-    <a class="site-brand" href="/" aria-label="回首頁">
+    <a class="site-brand" href={base} aria-label="回首頁">
       <span>ちっちゃな私には、</span>
       <span>ちっちゃな夢があります。</span>
     </a>

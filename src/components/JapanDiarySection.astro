@@ -1,83 +1,78 @@
 ---
-import JapanDiaryCard from "./JapanDiaryCard.astro";
-import apr15Image from "../assets/images/japan-diary/apr-15.jpg";
-import apr20Image from "../assets/images/japan-diary/apr-20.jpg";
-import apr28Image from "../assets/images/japan-diary/apr-28.jpg";
+import { getCollection } from "astro:content";
+import ArticleCard from "./ArticleCard.astro";
 
-const diaryItems = [
-  {
-    date: "APR 15",
-    title: "櫻花與鐵道散步",
-    excerpt: "抵達日本後的第一個春天，沿著鐵道慢慢走。",
-    category: "日本生活",
-    href: "/japan-wh/apr-15/",
-    accent: "var(--color-japan)",
-    image: apr15Image,
-imageAlt: "日本春天櫻花散步",
-  },
-  {
-    date: "APR 20",
-    title: "鎌倉小旅行",
-    excerpt: "搭著電車去海邊，記錄一場很安靜的小旅行。",
-    category: "旅行",
-    href: "/japan-wh/apr-20/",
-    accent: "var(--color-travel)",
-    image: apr20Image,
-imageAlt: "日本春天櫻花散步",
-  },
-  {
-    date: "APR 28",
-    title: "超市打工日常",
-    excerpt: "開始第一份工作後，慢慢適應新的生活節奏。",
-    category: "工作",
-    href: "/japan-wh/apr-28/",
-    accent: "var(--color-taiwan)",
-    image: apr28Image,
-imageAlt: "日本春天櫻花散步",
-  },
-];
+const posts = await getCollection(
+  "blog",
+  ({ data }) =>
+    !data.draft &&
+    data.category === "japan-wh"
+);
+
+const japanPosts = posts
+  .sort(
+    (a, b) =>
+      b.data.publishedDate.getTime() -
+      a.data.publishedDate.getTime()
+  )
+  .slice(0, 3);
 ---
 
 <section class="section japan-diary">
   <div class="container">
+
     <div class="section-header">
       <div>
-        <p class="section-eyebrow">JAPAN JOURNEY</p>
+        <p class="section-eyebrow">
+          JAPAN WH
+        </p>
+
         <h2>365 Days in Japan</h2>
       </div>
 
       <a href="/japan-wh/" class="view-all">
-        VIEW FULL DIARY
+        VIEW ALL STORIES
         <span aria-hidden="true">→</span>
       </a>
     </div>
 
-    <div class="month-nav" aria-label="月份">
-      <span class="active">APR</span>
-      <span>MAY</span>
-      <span>JUN</span>
-      <span>JUL</span>
-      <span>AUG</span>
-      <span>SEP</span>
-    </div>
+    {
+      japanPosts.length > 0 ? (
+        <div class="diary-grid">
+          {
+            japanPosts.map((post) => (
+              <ArticleCard
+                title={post.data.title}
+                excerpt={post.data.description}
+                category="日本生活"
+                date={post.data.publishedDate.toLocaleDateString("zh-TW")}
+                readTime={post.data.readTime}
+                href={`/${post.id.replace(/\.mdx?$/, "")}/`}
+                image={post.data.image}
+                imageAlt={post.data.imageAlt ?? ""}
+                accent="var(--color-japan)"
+              />
+            ))
+          }
+        </div>
+      ) : (
+        <p class="empty-message">
+          日本 Working Holiday 的故事準備中。
+        </p>
+      )
+    }
 
-    <div class="diary-grid">
-      {
-        diaryItems.map((item) => (
-          <JapanDiaryCard {...item} />
-        ))
-      }
-    </div>
   </div>
 </section>
 
 <style>
   .section-header {
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
 
     display: flex;
     justify-content: space-between;
     align-items: end;
+
     gap: var(--space-3);
   }
 
@@ -85,6 +80,7 @@ imageAlt: "日本春天櫻花散步",
     margin-bottom: var(--space-1);
 
     color: var(--color-text-muted);
+
     font-size: 0.75rem;
     letter-spacing: 0.15em;
   }
@@ -99,86 +95,43 @@ imageAlt: "日本春天櫻花散步",
     gap: var(--space-1);
 
     color: var(--color-japan);
+
     font-size: 0.75rem;
     letter-spacing: 0.08em;
   }
 
-  .month-nav {
-  margin-bottom: var(--space-4);
-  padding-bottom: var(--space-2);
-
-  display: flex;
-  gap: var(--space-3);
-
-  border-bottom: 1px solid var(--color-border);
-}
-
-  .month-nav span {
-    position: relative;
-
-    flex: 0 0 auto;
-
-    color: var(--color-text-muted);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
+  .view-all span {
+    transition:
+      transform var(--transition-base);
   }
 
-  .month-nav .active {
-    color: var(--color-japan);
-  }
-
-  .month-nav .active::after {
-    content: "";
-    position: absolute;
-
-    left: 0;
-    right: 0;
-    bottom: calc(var(--space-2) * -1 - 1px);
-
-    height: 2px;
-    background: var(--color-japan);
+  .view-all:hover span {
+    transform: translateX(4px);
   }
 
   .diary-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
     gap: var(--space-3);
   }
 
-  @media (max-width: 900px) {
+  .empty-message {
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 1100px) {
     .diary-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
     }
   }
-  @media (max-width: 1100px) {
-  .diary-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 
-@media (max-width: 767px) {
-  .section-header {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  .month-nav {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .month-nav::-webkit-scrollbar {
-    display: none;
-  }
-
-  .diary-grid {
-    grid-template-columns: 1fr;
-  }
-}
-  @media (max-width: 600px) {
+  @media (max-width: 767px) {
     .section-header {
       align-items: start;
       flex-direction: column;

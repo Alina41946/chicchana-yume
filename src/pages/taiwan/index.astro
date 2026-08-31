@@ -1,0 +1,577 @@
+---
+import { getCollection } from "astro:content";
+
+import Layout from "../../layouts/Layout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+
+const posts = await getCollection(
+  "blog",
+  ({ data }) =>
+    !data.draft &&
+    data.category === "taiwan"
+);
+
+const taiwanPosts = posts.sort(
+  (a, b) =>
+    b.data.publishedDate.getTime() -
+    a.data.publishedDate.getTime()
+);
+
+const regions = [
+  {
+    label: "ALL",
+    zh: "全部",
+    value: "all",
+  },
+  {
+    label: "NORTH",
+    zh: "北部",
+    value: "north",
+  },
+  {
+    label: "CENTRAL",
+    zh: "中部",
+    value: "central",
+  },
+  {
+    label: "SOUTH",
+    zh: "南部",
+    value: "south",
+  },
+  {
+    label: "EAST",
+    zh: "東部",
+    value: "east",
+  },
+  {
+    label: "ISLANDS",
+    zh: "離島",
+    value: "islands",
+  },
+];
+---
+
+<Layout
+  title="Taiwan｜ちっちゃな私には、ちっちゃな夢があります。"
+  description="記錄台灣旅行、城市散步與地方風景。"
+>
+  <main class="taiwan-page">
+
+    <section class="taiwan-hero">
+      <div class="container taiwan-hero-inner">
+
+        <div class="taiwan-heading">
+          <p class="page-eyebrow">
+            TAIWAN
+          </p>
+
+          <h1>
+            Small trips,
+            <br />
+            familiar places.
+          </h1>
+        </div>
+
+        <div class="taiwan-intro">
+          <p>
+            從熟悉的城市到還沒去過的地方，
+            記錄台灣旅行、散步與途中看到的風景。
+          </p>
+
+          <span class="post-count">
+            {String(taiwanPosts.length).padStart(2, "0")} STORIES
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="taiwan-about">
+      <div class="container taiwan-about-inner">
+
+        <p class="about-label">
+          ABOUT TAIWAN
+        </p>
+
+        <div class="about-copy">
+          <p>
+            有些旅行不一定要去很遠。
+          </p>
+
+          <p>
+            這裡記錄我在台灣走過的城市、
+            吃過的東西，以及那些平常可能不會特別注意的小地方。
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section taiwan-stories">
+      <div class="container">
+
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">
+              TRAVEL JOURNAL
+            </p>
+
+            <h2>Taiwan Stories</h2>
+          </div>
+
+          <span
+            class="post-count"
+            id="visible-count"
+          >
+            {taiwanPosts.length} STORIES
+          </span>
+        </div>
+
+        <nav
+          class="region-filter"
+          aria-label="台灣旅遊地區篩選"
+        >
+          {
+            regions.map((region) => (
+              <a
+                href={
+                  region.value === "all"
+                    ? "/taiwan/"
+                    : `/taiwan/?region=${region.value}`
+                }
+                class="filter-button"
+                data-region-filter={region.value}
+              >
+                <span>{region.label}</span>
+                <small>{region.zh}</small>
+              </a>
+            ))
+          }
+        </nav>
+
+        <div class="article-grid">
+          {
+            taiwanPosts.map((post) => (
+              <div
+                class="article-item"
+                data-region={post.data.region ?? ""}
+              >
+                <ArticleCard
+                  title={post.data.title}
+                  excerpt={post.data.description}
+                  category={post.data.location ?? "TAIWAN"}
+                  date={post.data.publishedDate.toLocaleDateString("zh-TW")}
+                  readTime={post.data.readTime}
+                  href={`/${post.id.replace(/\.mdx?$/, "")}/`}
+                  image={post.data.image}
+                  imageAlt={post.data.imageAlt ?? ""}
+                  accent="var(--color-taiwan)"
+                />
+              </div>
+            ))
+          }
+        </div>
+
+        <p
+          class="filter-empty"
+          id="filter-empty"
+          hidden
+        >
+          目前還沒有這個地區的旅行文章。
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<script>
+  const validRegions = [
+    "north",
+    "central",
+    "south",
+    "east",
+    "islands",
+  ];
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const requestedRegion =
+    params.get("region");
+
+  const activeRegion =
+    requestedRegion &&
+    validRegions.includes(requestedRegion)
+      ? requestedRegion
+      : "all";
+
+  const articleItems =
+    document.querySelectorAll<HTMLElement>(
+      ".article-item"
+    );
+
+  const filterButtons =
+    document.querySelectorAll<HTMLElement>(
+      "[data-region-filter]"
+    );
+
+  const emptyMessage =
+    document.querySelector<HTMLElement>(
+      "#filter-empty"
+    );
+
+  const visibleCount =
+    document.querySelector<HTMLElement>(
+      "#visible-count"
+    );
+
+  let count = 0;
+
+  articleItems.forEach((item) => {
+    const region =
+      item.dataset.region;
+
+    const visible =
+      activeRegion === "all" ||
+      region === activeRegion;
+
+    item.hidden = !visible;
+
+    if (visible) {
+      count += 1;
+    }
+  });
+
+  filterButtons.forEach((button) => {
+    const region =
+      button.dataset.regionFilter;
+
+    const active =
+      region === activeRegion;
+
+    button.classList.toggle(
+      "active",
+      active
+    );
+
+    if (active) {
+      button.setAttribute(
+        "aria-current",
+        "page"
+      );
+    }
+  });
+
+  if (emptyMessage) {
+    emptyMessage.hidden =
+      count !== 0;
+  }
+
+  if (visibleCount) {
+    visibleCount.textContent =
+      `${count} STORIES`;
+  }
+</script>
+
+<style>
+  .taiwan-hero {
+    padding-block: var(--space-8);
+
+    border-bottom:
+      1px solid
+      var(--color-border);
+  }
+
+  .taiwan-hero-inner {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1.4fr)
+      minmax(260px, 0.6fr);
+
+    align-items: end;
+
+    gap: var(--space-6);
+  }
+
+  .page-eyebrow,
+  .section-eyebrow,
+  .about-label {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .taiwan-heading h1 {
+    max-width: 820px;
+
+    margin-bottom: 0;
+
+    font-family: var(--font-display);
+
+    font-size:
+      clamp(3.5rem, 7vw, 6.5rem);
+
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+
+  .taiwan-intro {
+    padding-bottom: 0.5rem;
+  }
+
+  .taiwan-intro p {
+    max-width: 360px;
+
+    margin-bottom: var(--space-3);
+
+    color: var(--color-text-muted);
+  }
+
+  .post-count {
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .taiwan-about {
+    padding-block: var(--space-6);
+
+    border-bottom:
+      1px solid
+      var(--color-border);
+  }
+
+  .taiwan-about-inner {
+    display: grid;
+
+    grid-template-columns:
+      180px
+      minmax(0, 680px);
+
+    justify-content: center;
+
+    gap: var(--space-6);
+  }
+
+  .about-label {
+    margin-bottom: 0;
+  }
+
+  .about-copy {
+    font-family: var(--font-serif);
+
+    font-size: 1.25rem;
+    line-height: 2;
+  }
+
+  .about-copy p:last-child {
+    margin-bottom: 0;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-3);
+
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+
+    gap: var(--space-3);
+  }
+
+  .section-header h2 {
+    margin-bottom: 0;
+  }
+
+  /* =========================
+     Region Filter
+  ========================= */
+
+  .region-filter {
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+
+    display: flex;
+    align-items: center;
+
+    gap: var(--space-3);
+
+    overflow-x: auto;
+
+    border-bottom:
+      1px solid
+      var(--color-border);
+
+    scrollbar-width: none;
+  }
+
+  .region-filter::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-button {
+    position: relative;
+
+    flex: 0 0 auto;
+
+    padding-bottom: 0.15rem;
+
+    display: inline-flex;
+    align-items: baseline;
+
+    gap: 0.4rem;
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+
+    transition:
+      color var(--transition-base);
+  }
+
+  .filter-button small {
+    font-family: var(--font-serif);
+
+    font-size: 0.7rem;
+    letter-spacing: 0;
+  }
+
+  .filter-button:hover,
+  .filter-button.active {
+    color: var(--color-taiwan);
+  }
+
+  .filter-button.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    bottom:
+      calc(
+        var(--space-2) * -1
+        - 1px
+      );
+
+    height: 2px;
+
+    background:
+      var(--color-taiwan);
+  }
+
+  /* =========================
+     Articles
+  ========================= */
+
+  .article-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: var(--space-3);
+  }
+
+  .article-item {
+    min-width: 0;
+  }
+
+  .article-item[hidden] {
+    display: none;
+  }
+
+  .filter-empty {
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
+  }
+
+  /* =========================
+     Tablet
+  ========================= */
+
+  @media (max-width: 1100px) {
+    .article-grid {
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .taiwan-hero {
+      padding-block: var(--space-6);
+    }
+
+    .taiwan-hero-inner {
+      grid-template-columns: 1fr;
+
+      gap: var(--space-4);
+    }
+
+    .taiwan-intro {
+      max-width: 520px;
+    }
+
+    .taiwan-about-inner {
+      grid-template-columns:
+        140px
+        minmax(0, 1fr);
+
+      gap: var(--space-4);
+    }
+  }
+
+  /* =========================
+     Mobile
+  ========================= */
+
+  @media (max-width: 767px) {
+    .taiwan-hero {
+      padding-block: var(--space-5);
+    }
+
+    .taiwan-heading h1 {
+      font-size:
+        clamp(3rem, 14vw, 4.25rem);
+    }
+
+    .taiwan-about {
+      padding-block: var(--space-5);
+    }
+
+    .taiwan-about-inner {
+      grid-template-columns: 1fr;
+
+      gap: var(--space-2);
+    }
+
+    .about-copy {
+      font-size: 1.1rem;
+    }
+
+    .section-header {
+      align-items: start;
+      flex-direction: column;
+
+      gap: var(--space-1);
+    }
+
+    .region-filter {
+      gap: var(--space-2);
+    }
+
+    .article-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

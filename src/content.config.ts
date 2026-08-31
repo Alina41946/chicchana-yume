@@ -15,6 +15,10 @@ const blog = defineCollection({
       category: z.enum(['language', 'japan-wh', 'taiwan', 'works']),
 
       subcategory: z.string().optional(),
+      region: z
+        .enum(['north', 'central', 'south', 'east', 'islands'])
+        .optional(),
+      location: z.string().optional(),
 
       publishedDate: z.coerce.date(),
 
