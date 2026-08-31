@@ -37,15 +37,30 @@ const navItems = [
       </button>
 
       <button
-        class="menu-button"
-        type="button"
-        aria-label="開啟選單"
-      >
-        ☰
-      </button>
+  class="menu-button"
+  type="button"
+  aria-label="開啟選單"
+  aria-controls="mobile-menu"
+  aria-expanded="false"
+>
+  ☰
+</button>
     </div>
 
   </div>
+  <div class="mobile-menu" id="mobile-menu" hidden>
+  <nav aria-label="手機導覽">
+    <ul>
+      {
+        navItems.map((item) => (
+          <li>
+            <a href={item.href}>{item.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</div>
 </header>
 
 <style>
@@ -126,23 +141,79 @@ const navItems = [
     display: none;
   }
 
-  @media (max-width: 900px) {
-    .desktop-nav {
-      display: none;
-    }
-
-    .menu-button {
-      display: grid;
-    }
+ @media (max-width: 1100px) {
+  .desktop-nav {
+    display: none;
   }
 
-  @media (max-width: 767px) {
-    .header-inner {
-      min-height: 72px;
-    }
-
-    .site-brand {
-      font-size: 0.8rem;
-    }
+  .menu-button {
+    display: grid;
   }
+
+  .header-inner {
+    gap: var(--space-2);
+  }
+}
+
+ @media (max-width: 767px) {
+  .header-inner {
+    min-height: 72px;
+  }
+
+  .site-brand {
+    font-size: 0.8rem;
+  }
+}
+.mobile-menu {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.mobile-menu nav {
+  padding: var(--space-3) var(--page-padding);
+}
+
+.mobile-menu ul {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.mobile-menu a {
+  display: block;
+  padding-block: var(--space-1);
+
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+}
+
+.mobile-menu[hidden] {
+  display: none;
+}
+
+@media (min-width: 1101px) {
+  .mobile-menu {
+    display: none !important;
+  }
+}
 </style>
+
+<script>
+  const menuButton = document.querySelector(".menu-button");
+  const mobileMenu = document.querySelector("#mobile-menu");
+
+  if (menuButton && mobileMenu) {
+    menuButton.addEventListener("click", () => {
+      const isOpen = menuButton.getAttribute("aria-expanded") === "true";
+
+      menuButton.setAttribute("aria-expanded", String(!isOpen));
+
+      if (isOpen) {
+        mobileMenu.setAttribute("hidden", "");
+        menuButton.setAttribute("aria-label", "開啟選單");
+      } else {
+        mobileMenu.removeAttribute("hidden");
+        menuButton.setAttribute("aria-label", "關閉選單");
+      }
+    });
+  }
+</script>

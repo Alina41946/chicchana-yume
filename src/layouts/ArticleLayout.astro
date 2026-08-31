@@ -1,0 +1,615 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata, MarkdownHeading } from "astro";
+
+import Layout from "./Layout.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  category: string;
+  date: string;
+  readTime: string;
+
+  image?: ImageMetadata;
+  imageAlt?: string;
+
+  breadcrumb?: {
+    label: string;
+    href?: string;
+  }[];
+
+  previousArticle?: {
+    title: string;
+    href: string;
+  };
+
+  nextArticle?: {
+    title: string;
+    href: string;
+  };
+
+  headings?: MarkdownHeading[];
+}
+
+const {
+  title,
+  description,
+  category,
+  date,
+  readTime,
+  image,
+  imageAlt = "",
+  breadcrumb = [],
+  headings = [],
+  previousArticle,
+  nextArticle,
+} = Astro.props;
+
+const tocHeadings = headings.filter(
+  (heading) => heading.depth === 2
+);
+---
+
+<Layout title={title} description={description}>
+  <main class="article-page">
+    <article class="container article-container">
+
+      <nav class="breadcrumb" aria-label="麵包屑導覽">
+        <ol>
+          <li>
+            <a href="/">HOME</a>
+          </li>
+
+          {
+            breadcrumb.map((item, index) => (
+              <li>
+                <span aria-hidden="true">/</span>
+
+                {
+                  item.href && index !== breadcrumb.length - 1 ? (
+                    <a href={item.href}>{item.label}</a>
+                  ) : (
+                    <span
+                      aria-current={
+                        index === breadcrumb.length - 1
+                          ? "page"
+                          : undefined
+                      }
+                    >
+                      {item.label}
+                    </span>
+                  )
+                }
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <header class="article-header">
+        <span class="article-category">
+          {category}
+        </span>
+
+        <h1>{title}</h1>
+
+        <p class="article-description">
+          {description}
+        </p>
+
+        <div class="article-meta">
+          <time>{date}</time>
+          <span aria-hidden="true">·</span>
+          <span>{readTime}</span>
+        </div>
+      </header>
+
+      {
+        image && (
+          <div class="article-hero">
+            <Image
+              src={image}
+              alt={imageAlt}
+              widths={[640, 960, 1280]}
+              sizes="(max-width: 767px) 100vw, 900px"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
+        )
+      }
+
+      <div
+        class:list={[
+          "article-body",
+          {
+            "article-body-no-toc":
+              tocHeadings.length === 0,
+          },
+        ]}
+      >
+        {
+          tocHeadings.length > 0 && (
+            <aside class="article-toc">
+              <p class="toc-title">
+                CONTENTS
+              </p>
+
+              <nav aria-label="文章目錄">
+                <ol>
+                  {
+                    tocHeadings.map(
+                      (heading, index) => (
+                        <li>
+                          <a
+                            href={`#${heading.slug}`}
+                          >
+                            <span class="toc-number">
+                              {String(
+                                index + 1
+                              ).padStart(
+                                2,
+                                "0"
+                              )}.
+                            </span>
+
+                            <span>
+                              {heading.text}
+                            </span>
+                          </a>
+                        </li>
+                      )
+                    )
+                  }
+                </ol>
+              </nav>
+            </aside>
+          )
+        }
+
+        <div class="article-content">
+          <slot />
+        </div>
+      </div>
+
+      {
+        (previousArticle || nextArticle) && (
+          <nav
+            class="article-navigation"
+            aria-label="文章導覽"
+          >
+            <div class="article-navigation-item">
+              {
+                previousArticle && (
+                  <a
+                    href={previousArticle.href}
+                    class="article-navigation-link"
+                  >
+                    <span class="article-navigation-label">
+                      ← PREVIOUS
+                    </span>
+
+                    <span class="article-navigation-title">
+                      {previousArticle.title}
+                    </span>
+                  </a>
+                )
+              }
+            </div>
+
+            <div class="article-navigation-item article-navigation-next">
+              {
+                nextArticle && (
+                  <a
+                    href={nextArticle.href}
+                    class="article-navigation-link"
+                  >
+                    <span class="article-navigation-label">
+                      NEXT →
+                    </span>
+
+                    <span class="article-navigation-title">
+                      {nextArticle.title}
+                    </span>
+                  </a>
+                )
+              }
+            </div>
+          </nav>
+        )
+      }
+
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .article-page {
+    padding-block: var(--space-6);
+  }
+
+  .article-container {
+    max-width: 900px;
+  }
+
+  /* Breadcrumb */
+
+  .breadcrumb {
+    margin-bottom: var(--space-4);
+  }
+
+  .breadcrumb ol {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+  }
+
+  .breadcrumb li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .breadcrumb a {
+    transition: color var(--transition-base);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-japan);
+  }
+
+  /* Article Header */
+
+  .article-header {
+    max-width: 760px;
+    margin-bottom: var(--space-5);
+  }
+
+  .article-category {
+    display: inline-block;
+
+    margin-bottom: var(--space-2);
+    padding: 0.25rem 0.5rem;
+
+    background: var(--color-surface);
+    color: var(--color-language);
+
+    font-size: 0.75rem;
+  }
+
+  .article-header h1 {
+    margin-bottom: var(--space-2);
+  }
+
+  .article-description {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+  }
+
+  /* Hero Image */
+
+  .article-hero {
+    margin-bottom: var(--space-5);
+
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .article-hero :global(img) {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+  /* Article Body */
+
+  .article-body {
+    display: grid;
+    grid-template-columns:
+      180px
+      minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-5);
+  }
+
+  .article-body-no-toc {
+    grid-template-columns: 1fr;
+  }
+
+  /* Table of Contents */
+
+  .article-toc {
+    position: sticky;
+    top: var(--space-4);
+
+    padding-top: 0.25rem;
+  }
+
+  .toc-title {
+    margin-bottom: var(--space-2);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+  }
+
+  .article-toc ol {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .article-toc a {
+    display: flex;
+    gap: 0.4rem;
+
+    color: var(--color-text-muted);
+
+    font-size: 0.8rem;
+    line-height: 1.5;
+
+    transition: color var(--transition-base);
+  }
+
+  .article-toc a:hover {
+    color: var(--color-japan);
+  }
+
+  .toc-number {
+    flex: 0 0 auto;
+  }
+
+  /* Article Content */
+
+  .article-content {
+    min-width: 0;
+    max-width: 680px;
+  }
+
+  .article-body-no-toc .article-content {
+    max-width: 760px;
+  }
+
+  .article-content :global(section) {
+    margin-bottom: var(--space-5);
+  }
+
+  .article-content :global(h2) {
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+
+    scroll-margin-top: var(--space-4);
+  }
+
+  .article-content :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .article-content :global(h3) {
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-2);
+
+    scroll-margin-top: var(--space-4);
+  }
+
+  .article-content :global(p) {
+    margin-bottom: var(--space-3);
+
+    line-height: 2;
+  }
+
+  .article-content :global(a) {
+    color: var(--color-japan);
+
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .article-content :global(ul),
+  .article-content :global(ol) {
+    margin-bottom: var(--space-3);
+    padding-left: 1.25rem;
+  }
+
+  .article-content :global(li) {
+    margin-bottom: 0.5rem;
+
+    list-style: inherit;
+  }
+
+  /* Article Images */
+
+  .article-content :global(figure) {
+    margin: var(--space-4) 0;
+  }
+
+  .article-content :global(figure img) {
+    width: 100%;
+    height: auto;
+  }
+
+  .article-content :global(figcaption) {
+    margin-top: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  /* Article Note */
+
+  .article-content :global(.article-note) {
+    margin: var(--space-4) 0;
+    padding: var(--space-3);
+
+    border-top: 2px solid
+      var(--color-japan);
+
+    background:
+      var(--color-surface);
+  }
+
+  .article-content
+    :global(.article-note-title) {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-japan);
+
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+
+  .article-content
+    :global(.article-note p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Blockquote */
+
+  .article-content :global(blockquote) {
+    position: relative;
+
+    margin: var(--space-5) 0;
+    padding:
+      var(--space-3)
+      var(--space-4);
+
+    border-left: 2px solid
+      var(--color-japan);
+
+    color: var(--color-text-muted);
+
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    line-height: 1.9;
+  }
+
+  .article-content
+    :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+
+  /* Previous / Next */
+
+  .article-navigation {
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+
+    display: grid;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+
+    border-top:
+      1px solid var(--color-border);
+  }
+
+  .article-navigation-item {
+    min-width: 0;
+  }
+
+  .article-navigation-next {
+    text-align: right;
+  }
+
+  .article-navigation-link {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .article-navigation-label {
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .article-navigation-title {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    line-height: 1.6;
+
+    transition: color
+      var(--transition-base);
+  }
+
+  .article-navigation-link:hover
+    .article-navigation-title {
+    color: var(--color-japan);
+  }
+
+  /* Mobile */
+
+  @media (max-width: 767px) {
+    .article-page {
+      padding-block: var(--space-4);
+    }
+
+    .breadcrumb {
+      margin-bottom: var(--space-3);
+    }
+
+    .article-header {
+      margin-bottom: var(--space-4);
+    }
+
+    .article-description {
+      font-size: 1rem;
+    }
+
+    .article-hero {
+      margin-bottom: var(--space-4);
+
+      aspect-ratio: 4 / 3;
+    }
+
+    .article-body {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .article-toc {
+      position: static;
+
+      padding: var(--space-3);
+
+      background: var(--color-surface);
+    }
+
+    .article-content,
+    .article-body-no-toc .article-content {
+      max-width: none;
+    }
+
+    .article-navigation {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+
+    .article-navigation-next {
+      text-align: left;
+    }
+  }
+</style>

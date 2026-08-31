@@ -1,0 +1,83 @@
+---
+title: 'Personal Website'
+description: '從資訊架構、UI 設計到 Astro 開發，建立屬於自己的個人網站與內容平台。'
+category: 'works'
+publishedDate: 2026-08-31
+readTime: '5 min read'
+
+image: '../../../assets/images/works/personal-website/cover.jpg'
+imageAlt: 'Personal Website 個人網站設計'
+
+projectType: 'web-development'
+year: 2026
+role: 'UI Design / Front-end Development'
+
+draft: false
+---
+
+import WorkImage from '../../../components/WorkImage.astro';
+import WorkWideImage from '../../../components/WorkWideImage.astro';
+import WorkImageGrid from '../../../components/WorkImageGrid.astro';
+
+import overviewImage from '../../../assets/images/works/personal-website/overview.jpg';
+import uiDesignImage from '../../../assets/images/works/personal-website/ui-design.jpg';
+import desktopImage from '../../../assets/images/works/personal-website/desktop.jpg';
+import mobileImage from '../../../assets/images/works/personal-website/mobile.jpg';
+
+## Overview
+
+這是一個從零開始建立的個人網站。
+
+網站不只是作品集，也希望成為記錄語言學習、日本生活、台灣旅行與設計作品的長期內容平台。
+
+<WorkImage
+  src={overviewImage}
+  alt="Personal Website 首頁設計"
+  caption="Personal Website 首頁設計"
+/>
+
+## Challenge
+
+一開始最大的問題不是視覺設計，而是內容很多，包含語言學習、日本 Working Holiday、台灣旅行與作品集。
+
+如果只是把所有內容全部放在首頁，很容易變得雜亂，因此需要先重新整理資訊架構與內容層級。
+
+## Process
+
+我先從網站資訊架構開始，整理主要內容分類與使用者瀏覽路徑，再進行 Wireframe、視覺方向與頁面設計。
+
+之後使用 Astro 開始前端開發，並逐步建立共用元件、響應式版面與 Content Collection。
+
+<WorkWideImage
+  src={uiDesignImage}
+  alt="Personal Website UI 設計"
+  caption="從資訊架構、版面規劃到 UI Design"
+/>
+
+## Solution
+
+網站最後分成 Language、Japan WH、Taiwan、Works 等主要內容。
+
+文章使用 Content Collection 管理，而作品則另外建立 Case Study Layout，讓一般文章與作品集有不同的閱讀方式。
+
+同時透過共用元件減少重複程式碼，讓之後新增文章或作品時不需要重新製作整個頁面。
+
+## Result
+
+目前網站已建立首頁、文章系統、Language 分類與 Works Case Study 基礎架構，並持續加入實際內容。
+
+<WorkImageGrid caption="Desktop 與 Mobile 響應式設計">
+  <WorkImage
+    src={desktopImage}
+    alt="Personal Website Desktop 版面"
+  />
+
+  <WorkImage
+    src={mobileImage}
+    alt="Personal Website Mobile 版面"
+  />
+</WorkImageGrid>
+
+## What I Learned
+
+這個專案讓我不只是在製作單一網站畫面，而是開始思考內容結構、元件共用、響應式設計，以及未來網站如何持續擴充與維護。

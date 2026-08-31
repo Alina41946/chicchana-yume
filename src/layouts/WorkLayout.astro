@@ -1,0 +1,533 @@
+---
+import { Image } from "astro:assets";
+import type {
+  ImageMetadata,
+  MarkdownHeading,
+} from "astro";
+
+import Layout from "./Layout.astro";
+
+interface Props {
+  title: string;
+  description: string;
+
+  projectType: string;
+  year?: number;
+  role?: string;
+
+  image?: ImageMetadata;
+  imageAlt?: string;
+  headings?: MarkdownHeading[];
+}
+
+const {
+  title,
+  description,
+  projectType,
+  year,
+  role,
+  image,
+  imageAlt = "",
+  headings = [],
+} = Astro.props;
+
+const tocHeadings = headings.filter(
+  (heading) => heading.depth === 2
+);
+---
+
+<Layout
+  title={`${title}｜Works`}
+  description={description}
+>
+  <main class="work-page">
+
+    <section class="work-hero">
+      <div class="container">
+
+        <nav
+          class="breadcrumb"
+          aria-label="麵包屑導覽"
+        >
+          <ol>
+            <li>
+              <a href="/">HOME</a>
+            </li>
+
+            <li>
+              <span aria-hidden="true">/</span>
+
+              <a href="/works/">
+                WORKS
+              </a>
+            </li>
+
+            <li>
+              <span aria-hidden="true">/</span>
+
+              <span aria-current="page">
+                {title}
+              </span>
+            </li>
+          </ol>
+        </nav>
+
+        <div class="work-heading">
+
+          <div class="work-title">
+            <p class="work-type">
+              {projectType}
+            </p>
+
+            <h1>{title}</h1>
+
+            <p class="work-description">
+              {description}
+            </p>
+          </div>
+
+          <dl class="work-meta">
+
+            {
+              year && (
+                <div>
+                  <dt>YEAR</dt>
+                  <dd>{year}</dd>
+                </div>
+              )
+            }
+
+            {
+              role && (
+                <div>
+                  <dt>ROLE</dt>
+                  <dd>{role}</dd>
+                </div>
+              )
+            }
+
+          </dl>
+
+        </div>
+
+      </div>
+    </section>
+
+    {
+      image && (
+        <section class="work-cover">
+          <div class="container">
+            <Image
+              src={image}
+              alt={imageAlt}
+              widths={[800, 1200, 1600]}
+              sizes="(max-width: 767px) 100vw, 1200px"
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
+        </section>
+      )
+    }
+
+    <section class="work-content">
+      <div class="container work-content-inner">
+
+        <aside class="work-index">
+  <p class="work-index-title">
+    CASE STUDY
+  </p>
+
+  <nav aria-label="Case Study 目錄">
+    <ol>
+      {
+        tocHeadings.map((heading, index) => (
+          <li>
+            <a href={`#${heading.slug}`}>
+              <span class="work-index-number">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <span>
+                {heading.text}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+</aside>
+
+        <article class="work-article">
+          <slot />
+        </article>
+
+      </div>
+    </section>
+
+    <section class="back-to-works">
+      <div class="container">
+
+        <a href="/works/">
+          <span aria-hidden="true">
+            ←
+          </span>
+
+          BACK TO WORKS
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+  .work-hero {
+    padding-block: var(--space-6);
+  }
+
+  .breadcrumb {
+    margin-bottom: var(--space-6);
+  }
+
+  .breadcrumb ol {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+
+  .breadcrumb li {
+    display: flex;
+    align-items: center;
+
+    gap: var(--space-1);
+  }
+
+  .breadcrumb a {
+    transition:
+      color var(--transition-base);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-works);
+  }
+
+  .work-heading {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1.5fr)
+      minmax(240px, 0.5fr);
+
+    align-items: end;
+
+    gap: var(--space-6);
+  }
+
+  .work-type {
+    margin-bottom: var(--space-2);
+
+    color: var(--color-works);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+  }
+
+  .work-title h1 {
+    max-width: 760px;
+
+    margin-bottom: var(--space-3);
+
+    font-family: var(--font-display);
+
+    font-size: clamp(
+      3.5rem,
+      7vw,
+      6rem
+    );
+
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+
+  .work-description {
+    max-width: 620px;
+
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
+
+    font-size: 1rem;
+  }
+
+  .work-meta {
+    margin: 0;
+
+    display: grid;
+
+    gap: var(--space-3);
+  }
+
+  .work-meta div {
+    padding-top: var(--space-1);
+
+    border-top: 1px solid
+      var(--color-border);
+  }
+
+  .work-meta dt {
+    margin-bottom: 0.25rem;
+
+    color: var(--color-text-muted);
+
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+  }
+
+  .work-meta dd {
+    margin: 0;
+
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .work-cover {
+    padding-bottom: var(--space-7);
+  }
+
+ .work-cover :global(img) {
+  width: 100%;
+  height: clamp(420px, 55vw, 760px);
+  object-fit: cover;
+  object-position: center;
+}
+
+  .work-content {
+    padding-block: var(--space-7);
+
+    border-top: 1px solid
+      var(--color-border);
+  }
+
+  .work-content-inner {
+  display: grid;
+  grid-template-columns:
+    180px
+    minmax(0, 680px);
+
+  justify-content: center;
+  align-items: start;
+
+  gap: var(--space-6);
+}
+
+.work-index {
+  position: sticky;
+  top: var(--space-4);
+  align-self: start;
+
+  min-width: 0;
+
+  padding-top: 0.4rem;
+
+  z-index: 2;
+}
+
+.work-index-title {
+  margin-bottom: var(--space-2);
+
+  color: var(--color-text-muted);
+
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+}
+
+.work-index ol {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.work-index a {
+  display: grid;
+
+  grid-template-columns:
+    24px minmax(0, 1fr);
+
+  gap: 0.4rem;
+
+  color: var(--color-text-muted);
+
+  font-size: 0.75rem;
+  line-height: 1.5;
+
+  transition:
+    color var(--transition-base);
+}
+
+.work-index a:hover {
+  color: var(--color-works);
+}
+
+.work-index-number {
+  color: var(--color-works);
+
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+}
+
+ .work-article {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+  .work-article :global(h2) {
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-2);
+
+    font-size: 2rem;
+  }
+
+  .work-article :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .work-article :global(h3) {
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-2);
+  }
+
+  .work-article :global(p) {
+    margin-bottom: var(--space-3);
+
+    line-height: 2;
+  }
+
+  .work-article :global(img) {
+    width: 100%;
+
+    margin-block: var(--space-4);
+  }
+
+  .work-article :global(ul),
+  .work-article :global(ol) {
+    margin-bottom: var(--space-3);
+    padding-left: 1.25rem;
+  }
+
+  .work-article :global(li) {
+    margin-bottom: 0.5rem;
+
+    list-style: inherit;
+  }
+
+  .back-to-works {
+    padding-block: var(--space-5);
+
+    border-top: 1px solid
+      var(--color-border);
+  }
+
+  .back-to-works a {
+    display: inline-flex;
+    align-items: center;
+
+    gap: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+
+    transition:
+      color var(--transition-base);
+  }
+
+  .back-to-works a:hover {
+    color: var(--color-works);
+  }
+
+  @media (max-width: 900px) {
+    .work-heading {
+      grid-template-columns: 1fr;
+
+      gap: var(--space-4);
+    }
+
+    .work-meta {
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+
+    .work-content-inner {
+      grid-template-columns:
+        150px minmax(0, 1fr);
+
+      gap: var(--space-4);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .work-hero {
+      padding-block: var(--space-4);
+    }
+
+    .breadcrumb {
+      margin-bottom: var(--space-4);
+    }
+
+    .work-title h1 {
+      font-size: clamp(
+        3rem,
+        14vw,
+        4.25rem
+      );
+    }
+
+    .work-meta {
+      grid-template-columns: 1fr;
+    }
+
+    .work-cover {
+      padding-bottom: var(--space-5);
+    }
+
+    .work-content {
+      padding-block: var(--space-5);
+    }
+
+    .work-content-inner {
+      grid-template-columns: 1fr;
+
+      gap: var(--space-4);
+    }
+
+    .work-index {
+      padding-bottom: var(--space-2);
+
+      border-bottom: 1px solid
+        var(--color-border);
+    }
+
+    .work-article :global(h2) {
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-2);
+
+  scroll-margin-top: var(--space-4);
+
+  font-size: 2rem;
+}
+  }
+</style>

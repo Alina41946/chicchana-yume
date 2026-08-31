@@ -1,0 +1,251 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  title: string;
+  description: string;
+  href: string;
+
+  type: string;
+  year?: number;
+  role?: string;
+
+  image?: ImageMetadata;
+  imageAlt?: string;
+}
+
+const {
+  title,
+  description,
+  href,
+  type,
+  year,
+  role,
+  image,
+  imageAlt = "",
+} = Astro.props;
+---
+
+<article class="work-card">
+  <a href={href} class="work-link">
+
+    <div class="work-image">
+      {
+        image ? (
+          <Image
+            src={image}
+            alt={imageAlt}
+            widths={[600, 900, 1200]}
+            sizes="(max-width: 767px) 100vw, 50vw"
+            loading="lazy"
+          />
+        ) : (
+          <span class="image-placeholder">
+            PROJECT IMAGE
+          </span>
+        )
+      }
+
+      <span class="work-arrow" aria-hidden="true">
+        ↗
+      </span>
+    </div>
+
+    <div class="work-info">
+
+      <div class="work-meta">
+        <span>{type}</span>
+
+        {
+          year && (
+            <>
+              <span aria-hidden="true">/</span>
+              <span>{year}</span>
+            </>
+          )
+        }
+      </div>
+
+      <h3>{title}</h3>
+
+      <p class="work-description">
+        {description}
+      </p>
+
+      {
+        role && (
+          <p class="work-role">
+            ROLE — {role}
+          </p>
+        )
+      }
+
+    </div>
+
+  </a>
+</article>
+
+<style>
+  .work-card {
+    min-width: 0;
+    height: 100%;
+  }
+
+  .work-link {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    color: inherit;
+  }
+
+  .work-image {
+    position: relative;
+
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+
+    display: grid;
+    place-items: center;
+
+    background: var(--color-surface);
+  }
+
+  .work-image :global(img) {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition:
+      transform var(--transition-slow),
+      filter var(--transition-slow);
+  }
+
+  .work-link:hover
+    .work-image :global(img) {
+    transform: scale(1.03);
+  }
+
+  .image-placeholder {
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .work-arrow {
+    position: absolute;
+
+    right: var(--space-2);
+    bottom: var(--space-2);
+
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    background: var(--color-bg);
+
+    font-size: 1rem;
+    line-height: 1;
+
+    transition:
+      transform var(--transition-base),
+      background var(--transition-base);
+  }
+
+  .work-link:hover .work-arrow {
+    transform: translate(
+      3px,
+      -3px
+    );
+  }
+
+  .work-info {
+    flex: 1;
+
+    padding-top: var(--space-2);
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .work-meta {
+    min-height: 1.4rem;
+
+    margin-bottom: var(--space-1);
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    line-height: 1.4;
+    letter-spacing: 0.1em;
+  }
+
+  .work-info h3 {
+    min-height: 4.2rem;
+
+    margin-bottom: var(--space-1);
+
+    font-size: 1.5rem;
+    line-height: 1.4;
+
+    transition:
+      color var(--transition-base);
+  }
+
+  .work-link:hover h3 {
+    color: var(--color-works);
+  }
+
+  .work-description {
+    max-width: 520px;
+
+    min-height: 4.8rem;
+
+    margin-bottom: var(--space-2);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.875rem;
+    line-height: 1.8;
+  }
+
+  .work-role {
+    margin-top: auto;
+    margin-bottom: 0;
+
+    padding-top: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    line-height: 1.6;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 767px) {
+    .work-info h3 {
+      min-height: auto;
+
+      font-size: 1.3rem;
+    }
+
+    .work-description {
+      min-height: auto;
+    }
+
+    .work-role {
+      margin-top: 0;
+    }
+  }
+</style>

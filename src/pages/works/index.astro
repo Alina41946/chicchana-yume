@@ -1,0 +1,442 @@
+---
+import { getCollection } from "astro:content";
+
+import Layout from "../../layouts/Layout.astro";
+import WorkCard from "../../components/WorkCard.astro";
+
+const posts = await getCollection(
+  "blog",
+  ({ data }) =>
+    !data.draft &&
+    data.category === "works"
+);
+
+const workPosts = posts.sort(
+  (a, b) =>
+    b.data.publishedDate.getTime() -
+    a.data.publishedDate.getTime()
+);
+
+const projectTypeLabels = {
+  "web-design": "WEB DESIGN",
+  "web-development": "WEB DEVELOPMENT",
+  "graphic-design": "GRAPHIC DESIGN",
+  motion: "MOTION",
+  "personal-project": "PERSONAL PROJECT",
+};
+
+const filters = [
+  { label: "ALL", value: "all" },
+  { label: "WEB DESIGN", value: "web-design" },
+  { label: "WEB DEVELOPMENT", value: "web-development" },
+  { label: "GRAPHIC DESIGN", value: "graphic-design" },
+  { label: "MOTION", value: "motion" },
+  { label: "PERSONAL PROJECT", value: "personal-project" },
+];
+---
+
+<Layout
+  title="Works｜ちっちゃな私には、ちっちゃな夢があります。"
+  description="設計、網站與個人專案作品紀錄。"
+>
+  <main class="works-page">
+
+    <section class="works-hero">
+      <div class="container works-hero-inner">
+
+        <div class="works-heading">
+          <p class="page-eyebrow">
+            SELECTED WORKS
+          </p>
+
+          <h1>
+            Ideas,
+            <br />
+            shaped into
+            <br />
+            something real.
+          </h1>
+        </div>
+
+        <div class="works-intro">
+          <p>
+            記錄設計、網站與個人專案，
+            從想法、過程到最後完成的作品。
+          </p>
+
+          <span class="works-count">
+            {String(workPosts.length).padStart(2, "0")} PROJECTS
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="works-categories">
+      <div class="container">
+
+        <div
+          class="work-filters"
+          aria-label="作品分類篩選"
+        >
+          {
+            filters.map((filter, index) => (
+              <button
+                type="button"
+                class:list={[
+                  "work-filter-button",
+                  { active: index === 0 },
+                ]}
+                data-filter={filter.value}
+              >
+                {filter.label}
+              </button>
+            ))
+          }
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section works-list">
+      <div class="container">
+
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">
+              PROJECTS
+            </p>
+
+            <h2>Selected Works</h2>
+          </div>
+
+          <span class="post-count">
+            {workPosts.length} PROJECTS
+          </span>
+        </div>
+
+        {
+          workPosts.length > 0 ? (
+            <>
+              <div class="work-grid">
+                {
+                  workPosts.map((post) => {
+                    const projectType =
+                      post.data.projectType
+                        ? projectTypeLabels[
+                            post.data.projectType as keyof typeof projectTypeLabels
+                          ]
+                        : "PROJECT";
+
+                    return (
+                      <div
+                        class="work-item"
+                        data-project-type={post.data.projectType ?? ""}
+                      >
+                        <WorkCard
+                          title={post.data.title}
+                          description={post.data.description}
+                          href={`/${post.id.replace(/\.mdx?$/, "")}/`}
+                          type={projectType}
+                          year={post.data.year}
+                          role={post.data.role}
+                          image={post.data.image}
+                          imageAlt={post.data.imageAlt ?? ""}
+                        />
+                      </div>
+                    );
+                  })
+                }
+              </div>
+
+              <p class="filter-empty" hidden>
+                目前還沒有這個分類的作品。
+              </p>
+            </>
+          ) : (
+            <p class="empty-message">
+              作品整理中，之後會慢慢放上來。
+            </p>
+          )
+        }
+
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+  .works-hero {
+    padding-block: var(--space-8);
+
+    border-bottom: 1px solid
+      var(--color-border);
+  }
+
+  .works-hero-inner {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1.4fr)
+      minmax(260px, 0.6fr);
+
+    align-items: end;
+
+    gap: var(--space-6);
+  }
+
+  .page-eyebrow,
+  .section-eyebrow {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .works-heading h1 {
+    max-width: 760px;
+
+    margin-bottom: 0;
+
+    font-family: var(--font-display);
+
+    font-size: clamp(
+      3.5rem,
+      7vw,
+      6.5rem
+    );
+
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+  }
+
+  .works-intro {
+    padding-bottom: 0.5rem;
+  }
+
+  .works-intro p {
+    max-width: 360px;
+
+    margin-bottom: var(--space-3);
+
+    color: var(--color-text-muted);
+  }
+
+  .works-count,
+  .post-count {
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .works-categories {
+    border-bottom: 1px solid
+      var(--color-border);
+  }
+
+  .work-filters {
+    min-height: 64px;
+
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+
+    overflow-x: auto;
+
+    scrollbar-width: none;
+  }
+
+  .work-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .work-filter-button {
+    position: relative;
+
+    flex: 0 0 auto;
+
+    padding: 1.25rem 0;
+
+    border: 0;
+    background: transparent;
+
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+
+    cursor: pointer;
+  }
+
+  .work-filter-button::after {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 1px;
+
+    background: var(--color-works);
+
+    transform: scaleX(0);
+    transform-origin: left;
+
+    transition:
+      transform var(--transition-base);
+  }
+
+  .work-filter-button:hover,
+  .work-filter-button.active {
+    color: var(--color-text);
+  }
+
+  .work-filter-button.active::after {
+    transform: scaleX(1);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-4);
+
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+
+    gap: var(--space-3);
+  }
+
+  .section-header h2 {
+    margin-bottom: 0;
+  }
+
+  .work-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap:
+      var(--space-6)
+      var(--space-3);
+  }
+
+  .work-item[hidden] {
+    display: none;
+  }
+
+  .empty-message,
+  .filter-empty {
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
+  }
+
+  .filter-empty {
+    margin-top: var(--space-4);
+  }
+
+  @media (max-width: 900px) {
+    .works-hero {
+      padding-block: var(--space-6);
+    }
+
+    .works-hero-inner {
+      grid-template-columns: 1fr;
+
+      gap: var(--space-4);
+    }
+
+    .works-intro {
+      max-width: 520px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .works-hero {
+      padding-block: var(--space-5);
+    }
+
+    .works-heading h1 {
+      font-size: clamp(
+        3rem,
+        14vw,
+        4.25rem
+      );
+    }
+
+    .work-filters {
+      gap: var(--space-2);
+    }
+
+    .work-grid {
+      grid-template-columns: 1fr;
+
+      gap: var(--space-5);
+    }
+
+    .section-header {
+      align-items: start;
+      flex-direction: column;
+
+      gap: var(--space-1);
+    }
+  }
+</style>
+
+<script>
+  const filterButtons =
+    document.querySelectorAll<HTMLButtonElement>(
+      ".work-filter-button"
+    );
+
+  const workItems =
+    document.querySelectorAll<HTMLElement>(
+      ".work-item"
+    );
+
+  const emptyMessage =
+    document.querySelector<HTMLElement>(
+      ".filter-empty"
+    );
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const selectedFilter =
+        button.dataset.filter ?? "all";
+
+      filterButtons.forEach((item) => {
+        item.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      let visibleCount = 0;
+
+      workItems.forEach((item) => {
+        const projectType =
+          item.dataset.projectType;
+
+        const shouldShow =
+          selectedFilter === "all" ||
+          projectType === selectedFilter;
+
+        item.hidden = !shouldShow;
+
+        if (shouldShow) {
+          visibleCount++;
+        }
+      });
+
+      if (emptyMessage) {
+        emptyMessage.hidden =
+          visibleCount > 0;
+      }
+    });
+  });
+</script>

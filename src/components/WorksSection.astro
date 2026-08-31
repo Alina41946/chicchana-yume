@@ -1,42 +1,40 @@
 ---
-import ProjectCard from "./ProjectCard.astro";
-import personalWebsiteImage from "../assets/images/works/personal-website.jpg";
-import landingPageImage from "../assets/images/works/landing-page.jpg";
-import campaignVisualImage from "../assets/images/works/campaign-visual.jpg";
+import { getCollection } from "astro:content";
+import WorkCard from "./WorkCard.astro";
 
-const projects = [
-  {
-    title: "Personal Website",
-    category: "WEB DESIGN / UI UX",
-    year: "2026",
-    href: "/works/personal-website/",
-    image: personalWebsiteImage,
-imageAlt: "個人網站設計畫面",
-  },
-  {
-    title: "Landing Page Design",
-    category: "WEB DESIGN",
-    year: "2026",
-    href: "/works/landing-page/",
-    image: landingPageImage,
-imageAlt: "個人網站設計畫面",
-  },
-  {
-    title: "Campaign Visual Design",
-    category: "GRAPHIC DESIGN",
-    year: "2026",
-    href: "/works/campaign-visual/",
-    image: campaignVisualImage,
-imageAlt: "個人網站設計畫面",
-  },
-];
+const posts = await getCollection(
+  "blog",
+  ({ data }) =>
+    !data.draft &&
+    data.category === "works"
+);
+
+const workPosts = posts
+  .sort(
+    (a, b) =>
+      b.data.publishedDate.getTime() -
+      a.data.publishedDate.getTime()
+  )
+  .slice(0, 3);
+
+const projectTypeLabels = {
+  "web-design": "WEB DESIGN",
+  "web-development": "WEB DEVELOPMENT",
+  "graphic-design": "GRAPHIC DESIGN",
+  motion: "MOTION",
+  "personal-project": "PERSONAL PROJECT",
+};
 ---
 
 <section class="section works-section">
   <div class="container">
+
     <div class="section-header">
       <div>
-        <p class="section-eyebrow">PORTFOLIO</p>
+        <p class="section-eyebrow">
+          PORTFOLIO
+        </p>
+
         <h2>Selected Works</h2>
       </div>
 
@@ -46,13 +44,40 @@ imageAlt: "個人網站設計畫面",
       </a>
     </div>
 
-    <div class="project-grid">
-      {
-        projects.map((project) => (
-          <ProjectCard {...project} />
-        ))
-      }
-    </div>
+    {
+      workPosts.length > 0 ? (
+        <div class="project-grid">
+          {
+            workPosts.map((post) => {
+              const projectType =
+                post.data.projectType
+                  ? projectTypeLabels[
+                      post.data.projectType as keyof typeof projectTypeLabels
+                    ]
+                  : "PROJECT";
+
+              return (
+                <WorkCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  href={`/${post.id.replace(/\.mdx?$/, "")}/`}
+                  type={projectType}
+                  year={post.data.year}
+                  role={post.data.role}
+                  image={post.data.image}
+                  imageAlt={post.data.imageAlt ?? ""}
+                />
+              );
+            })
+          }
+        </div>
+      ) : (
+        <p class="empty-message">
+          作品整理中，之後會慢慢放上來。
+        </p>
+      )
+    }
+
   </div>
 </section>
 
@@ -70,6 +95,7 @@ imageAlt: "個人網站設計畫面",
     margin-bottom: var(--space-1);
 
     color: var(--color-text-muted);
+
     font-size: 0.75rem;
     letter-spacing: 0.15em;
   }
@@ -84,12 +110,14 @@ imageAlt: "個人網站設計畫面",
     gap: var(--space-1);
 
     color: var(--color-works);
+
     font-size: 0.75rem;
     letter-spacing: 0.08em;
   }
 
   .view-all span {
-    transition: transform var(--transition-base);
+    transition:
+      transform var(--transition-base);
   }
 
   .view-all:hover span {
@@ -98,13 +126,23 @@ imageAlt: "個人網站設計畫面",
 
   .project-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
     gap: var(--space-3);
+  }
+
+  .empty-message {
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
   }
 
   @media (max-width: 900px) {
     .project-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
     }
   }
 

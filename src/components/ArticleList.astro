@@ -1,0 +1,120 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+import ArticleCard from "./ArticleCard.astro";
+
+interface Props {
+  posts: CollectionEntry<"blog">[];
+
+  categoryLabel?: string;
+  accent?: string;
+
+  emptyMessage?: string;
+}
+
+const {
+  posts,
+  categoryLabel,
+  accent = "var(--color-japan)",
+  emptyMessage = "目前還沒有文章。",
+} = Astro.props;
+
+const categoryInfo = {
+  language: {
+    label: "語言學習",
+    accent: "var(--color-language)",
+  },
+
+  "japan-wh": {
+    label: "日本生活",
+    accent: "var(--color-japan)",
+  },
+
+  taiwan: {
+    label: "台灣旅行",
+    accent: "var(--color-taiwan)",
+  },
+
+  works: {
+    label: "設計作品",
+    accent: "var(--color-works)",
+  },
+};
+---
+
+{
+  posts.length > 0 ? (
+    <div class="article-grid">
+      {
+        posts.map((post) => {
+          const defaultCategory =
+            categoryInfo[
+              post.data.category as keyof typeof categoryInfo
+            ];
+
+          return (
+            <ArticleCard
+              title={post.data.title}
+              excerpt={post.data.description}
+              category={
+                categoryLabel ??
+                defaultCategory.label
+              }
+              date={post.data.publishedDate.toLocaleDateString(
+                "zh-TW"
+              )}
+              readTime={post.data.readTime}
+              href={`/${post.id.replace(
+                /\.mdx?$/,
+                ""
+              )}/`}
+              image={post.data.image}
+              imageAlt={
+                post.data.imageAlt ?? ""
+              }
+              accent={
+                categoryLabel
+                  ? accent
+                  : defaultCategory.accent
+              }
+            />
+          );
+        })
+      }
+    </div>
+  ) : (
+    <p class="empty-message">
+      {emptyMessage}
+    </p>
+  )
+}
+
+<style>
+  .article-grid {
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: var(--space-3);
+  }
+
+  .empty-message {
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 1100px) {
+    .article-grid {
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 767px) {
+    .article-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

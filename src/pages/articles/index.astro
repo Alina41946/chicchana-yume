@@ -1,0 +1,339 @@
+---
+import { getCollection } from "astro:content";
+
+import Layout from "../../layouts/Layout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+
+const posts = await getCollection(
+  "blog",
+  ({ data }) => !data.draft
+);
+
+const sortedPosts = posts.sort(
+  (a, b) =>
+    b.data.publishedDate.getTime() -
+    a.data.publishedDate.getTime()
+);
+
+const categoryInfo = {
+  language: {
+    label: "語言學習",
+    accent: "var(--color-language)",
+  },
+
+  "japan-wh": {
+    label: "日本生活",
+    accent: "var(--color-japan)",
+  },
+
+  taiwan: {
+    label: "台灣旅行",
+    accent: "var(--color-taiwan)",
+  },
+
+  works: {
+    label: "設計作品",
+    accent: "var(--color-works)",
+  },
+};
+const filters = [
+  { label: "ALL", value: "all" },
+  { label: "LANGUAGE", value: "language" },
+  { label: "JAPAN WH", value: "japan-wh" },
+  { label: "TAIWAN", value: "taiwan" },
+  { label: "WORKS", value: "works" },
+];
+const articleItems = sortedPosts.map((post) => {
+  const category =
+    categoryInfo[
+      post.data.category as keyof typeof categoryInfo
+    ];
+
+  return {
+    post,
+    category,
+  };
+});
+---
+
+<Layout
+  title="Articles｜ちっちゃな私には、ちっちゃな夢があります。"
+  description="語言學習、日本打工度假、台灣旅行與設計作品的文章紀錄。"
+>
+  <main class="articles-page">
+
+    <section class="articles-hero">
+      <div class="container">
+        <p class="page-eyebrow">
+          JOURNAL
+        </p>
+
+        <h1>All Stories</h1>
+
+        <p class="page-description">
+          語言學習、日本生活、台灣旅行與設計作品的紀錄。
+        </p>
+      </div>
+    </section>
+
+    <section class="articles-list">
+      <div class="container">
+      <div class="article-filters" aria-label="文章分類篩選">
+  {
+    filters.map((filter, index) => (
+      <button
+        class:list={[
+          "filter-button",
+          { active: index === 0 },
+        ]}
+        type="button"
+        data-filter={filter.value}
+      >
+        {filter.label}
+      </button>
+    ))
+  }
+</div>
+
+        {
+          sortedPosts.length > 0 ? (
+           <div class="article-grid">
+  {
+  articleItems.map(({ post, category }) => (
+    <div
+      class="article-item"
+      data-category={post.data.category}
+    >
+      <ArticleCard
+        title={post.data.title}
+        excerpt={post.data.description}
+        category={category.label}
+        date={post.data.publishedDate.toLocaleDateString(
+          "zh-TW"
+        )}
+        readTime={post.data.readTime}
+        href={`/${post.id.replace(
+          /\.mdx?$/,
+          ""
+        )}/`}
+        image={post.data.image}
+        imageAlt={post.data.imageAlt ?? ""}
+        accent={category.accent}
+      />
+    </div>
+  ))
+}
+</div>
+
+<p class="filter-empty" hidden>
+  目前還沒有這個分類的文章。
+</p>
+          ) : (
+            <p class="empty-message">
+              目前還沒有文章。
+            </p>
+          )
+        }
+
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+.filter-empty {
+  margin-top: var(--space-4);
+
+  color: var(--color-text-muted);
+
+  font-size: 0.95rem;
+}
+.article-filters {
+  margin-bottom: var(--space-4);
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+.filter-button {
+  position: relative;
+
+  padding: 0.75rem 0;
+  margin-right: var(--space-3);
+
+  border: 0;
+  background: transparent;
+
+  color: var(--color-text-muted);
+
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+
+  cursor: pointer;
+}
+
+.filter-button::after {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+
+  width: 100%;
+  height: 1px;
+
+  background: var(--color-japan);
+
+  transform: scaleX(0);
+  transform-origin: left;
+
+  transition: transform var(--transition-base);
+}
+
+.filter-button:hover,
+.filter-button.active {
+  color: var(--color-text);
+}
+
+.filter-button.active::after {
+  transform: scaleX(1);
+}
+
+.article-item[hidden] {
+  display: none;
+}
+  .articles-page {
+    padding-bottom: var(--space-7);
+  }
+
+  .articles-hero {
+    padding-block: var(--space-7);
+  }
+
+  .page-eyebrow {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .articles-hero h1 {
+    margin-bottom: var(--space-2);
+  }
+
+  .page-description {
+    max-width: 560px;
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
+  }
+
+  .articles-list {
+    padding-bottom: var(--space-6);
+  }
+
+  .article-grid {
+    display: grid;
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .empty-message {
+    color: var(--color-text-muted);
+  }
+
+  @media (max-width: 1100px) {
+    .article-grid {
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 767px) {
+     .article-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+
+    scrollbar-width: none;
+  }
+
+  .article-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-button {
+    flex: 0 0 auto;
+    margin-right: var(--space-2);
+  }
+    .articles-page {
+      padding-bottom: var(--space-5);
+    }
+
+    .articles-hero {
+      padding-block: var(--space-5);
+    }
+
+    .article-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const filterButtons =
+    document.querySelectorAll<HTMLButtonElement>(
+      ".filter-button"
+    );
+
+  const articleItems =
+    document.querySelectorAll<HTMLElement>(
+      ".article-item"
+    );
+
+  const emptyMessage =
+    document.querySelector<HTMLElement>(
+      ".filter-empty"
+    );
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const selectedFilter =
+        button.dataset.filter ?? "all";
+
+      filterButtons.forEach((item) => {
+        item.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      let visibleCount = 0;
+
+      articleItems.forEach((item) => {
+        const category =
+          item.dataset.category;
+
+        const shouldShow =
+          selectedFilter === "all" ||
+          category === selectedFilter;
+
+        item.hidden = !shouldShow;
+
+        if (shouldShow) {
+          visibleCount++;
+        }
+      });
+
+      if (emptyMessage) {
+        emptyMessage.hidden =
+          visibleCount > 0;
+      }
+    });
+  });
+</script>

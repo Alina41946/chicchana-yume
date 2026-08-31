@@ -1,55 +1,49 @@
 ---
+import { getCollection } from "astro:content";
 import ArticleCard from "./ArticleCard.astro";
-import japaneseStudyImage from "../assets/images/articles/japanese-study.jpg";
-import japanWorkImage from "../assets/images/articles/japan-work.jpg";
-import tainanTripImage from "../assets/images/articles/tainan-trip.jpg";
 
-const stories = [
-  {
-    title: "JLPT N2 自學準備方法",
-    excerpt: "整理我的 N2 準備計畫、使用教材與實際學習方式。",
-    category: "日文學習",
-    date: "2026.08.14",
-    readTime: "8 min read",
-    href: "/language/japanese/jlpt-n2/",
-    image: japaneseStudyImage,
-    imageAlt: "日文學習筆記與教材",
+const posts = await getCollection(
+  "blog",
+  ({ data }) =>
+    !data.draft &&
+    data.category !== "works"
+);
+
+const latestPosts = posts
+  .sort(
+    (a, b) =>
+      b.data.publishedDate.getTime() -
+      a.data.publishedDate.getTime()
+  )
+  .slice(0, 3);
+
+const categoryInfo = {
+  language: {
+    label: "語言學習",
     accent: "var(--color-language)",
   },
-  {
-    title: "在日本的第一份工作",
-    excerpt: "記錄 Working Holiday 期間第一次工作的經驗與心得。",
-    category: "日本生活",
-    date: "2026.08.10",
-    readTime: "6 min read",
-    href: "/japan-wh/first-job/",
-    image: japanWorkImage,
-    imageAlt: "日本生活街景",
+
+  "japan-wh": {
+    label: "日本生活",
     accent: "var(--color-japan)",
   },
-  {
-    title: "台南兩天一夜行程",
-    excerpt: "慢慢走、慢慢吃，在老城裡安排一趟舒服的小旅行。",
-    category: "台灣旅行",
-    date: "2026.08.05",
-    readTime: "7 min read",
-    href: "/taiwan/tainan/2-days/",
-    image: tainanTripImage,
-    imageAlt: "台南旅行街景",
+
+  taiwan: {
+    label: "台灣旅行",
     accent: "var(--color-taiwan)",
   },
-];
+};
 ---
 
 <section class="section latest-stories">
   <div class="container">
     <div class="section-header">
       <div>
-        <p class="section-eyebrow">JOURNAL</p>
-        <h2>Latest Stories</h2>
+       <p class="section-eyebrow">LANGUAGE</p>
+<h2>Language Notes</h2>
       </div>
 
-      <a href="/articles/" class="view-all">
+      <a href="/language/" class="view-all">
         VIEW ALL
         <span aria-hidden="true">→</span>
       </a>
@@ -57,9 +51,28 @@ const stories = [
 
     <div class="article-grid">
       {
-        stories.map((story) => (
-          <ArticleCard {...story} />
-        ))
+        latestPosts.map((post) => {
+          const category =
+            categoryInfo[
+              post.data.category as keyof typeof categoryInfo
+            ];
+
+          return (
+            <ArticleCard
+              title={post.data.title}
+              excerpt={post.data.description}
+              category={category.label}
+              date={post.data.publishedDate.toLocaleDateString(
+                "zh-TW"
+              )}
+              readTime={post.data.readTime}
+              href={`/${post.id.replace(/\.mdx?$/, "")}/`}
+              image={post.data.image}
+              imageAlt={post.data.imageAlt ?? ""}
+              accent={category.accent}
+            />
+          );
+        })
       }
     </div>
   </div>

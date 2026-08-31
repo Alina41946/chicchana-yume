@@ -1,0 +1,416 @@
+---
+import { getCollection } from "astro:content";
+
+import Layout from "../../layouts/Layout.astro";
+import ArticleList from "../../components/ArticleList.astro";
+
+const posts = await getCollection(
+  "blog",
+  ({ data }) =>
+    !data.draft &&
+    data.category === "language"
+);
+
+const languagePosts = posts.sort(
+  (a, b) =>
+    b.data.publishedDate.getTime() -
+    a.data.publishedDate.getTime()
+);
+
+const japanesePosts = languagePosts.filter(
+  (post) =>
+    post.data.subcategory === "japanese"
+);
+
+const koreanPosts = languagePosts.filter(
+  (post) =>
+    post.data.subcategory === "korean"
+);
+---
+
+<Layout
+  title="Language｜ちっちゃな私には、ちっちゃな夢があります。"
+  description="日文、韓文自學與語言學習紀錄。"
+>
+  <main class="language-page">
+
+    <section class="language-hero">
+      <div class="container hero-inner">
+        <div>
+          <p class="page-eyebrow">
+            LANGUAGE
+          </p>
+
+          <h1>
+            Learning,
+            <br />
+            little by little.
+          </h1>
+
+          <p class="page-description">
+            日文與韓文的自學紀錄、教材整理，
+            還有一路上慢慢累積的學習心得。
+          </p>
+        </div>
+
+        <p class="hero-note" aria-hidden="true">
+          words become
+          <br />
+          little worlds.
+        </p>
+      </div>
+    </section>
+
+    <section class="section language-categories">
+      <div class="container">
+        <div class="section-heading">
+          <p class="section-eyebrow">
+            EXPLORE
+          </p>
+
+          <h2>Choose a Language</h2>
+        </div>
+
+        <div class="language-grid">
+
+          <a
+            href="/language/japanese/"
+            class="language-card japanese-card"
+          >
+            <span class="language-number">
+              01
+            </span>
+
+            <div>
+              <p class="language-label">
+                JAPANESE
+              </p>
+
+              <h3>日本語</h3>
+
+              <p>
+                JLPT、教材、自學方法與日文學習紀錄。
+              </p>
+            </div>
+
+            <span
+              class="language-arrow"
+              aria-hidden="true"
+            >
+              →
+            </span>
+          </a>
+
+          <a
+            href="/language/korean/"
+            class="language-card korean-card"
+          >
+            <span class="language-number">
+              02
+            </span>
+
+            <div>
+              <p class="language-label">
+                KOREAN
+              </p>
+
+              <h3>한국어</h3>
+
+              <p>
+                韓文入門、自學筆記與學習過程。
+              </p>
+            </div>
+
+            <span
+              class="language-arrow"
+              aria-hidden="true"
+            >
+              →
+            </span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <section
+      id="japanese"
+      class="section language-section"
+    >
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">
+              JAPANESE
+            </p>
+
+            <h2>日本語の記録</h2>
+          </div>
+
+          <span class="post-count">
+            {japanesePosts.length} STORIES
+          </span>
+        </div>
+
+        <ArticleList
+  posts={japanesePosts}
+  categoryLabel="日文學習"
+  accent="var(--color-language)"
+  emptyMessage="日文文章準備中。"
+/>
+      </div>
+    </section>
+
+    <section
+      id="korean"
+      class="section language-section korean-section"
+    >
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">
+              KOREAN
+            </p>
+
+            <h2>한국어 기록</h2>
+          </div>
+
+          <span class="post-count">
+            {koreanPosts.length} STORIES
+          </span>
+        </div>
+
+        <ArticleList
+  posts={koreanPosts}
+  categoryLabel="韓文學習"
+  accent="var(--color-language)"
+  emptyMessage="韓文文章準備中。"
+/>
+      </div>
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+  .language-page {
+    overflow: hidden;
+  }
+
+  .language-hero {
+    padding-block: var(--space-8);
+
+    border-bottom: 1px solid
+      var(--color-border);
+  }
+
+  .hero-inner {
+    position: relative;
+  }
+
+  .page-eyebrow,
+  .section-eyebrow {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .language-hero h1 {
+    max-width: 700px;
+
+    margin-bottom: var(--space-3);
+
+    font-family: var(--font-display);
+    font-size: clamp(
+      3.5rem,
+      7vw,
+      6rem
+    );
+    font-weight: 400;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+
+  .page-description {
+    max-width: 520px;
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
+  }
+
+  .hero-note {
+    position: absolute;
+
+    right: 0;
+    bottom: 0;
+
+    margin: 0;
+
+    color: var(--color-language);
+
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 1.5;
+
+    transform: rotate(-4deg);
+  }
+
+  .section-heading {
+    margin-bottom: var(--space-4);
+  }
+
+  .section-heading h2 {
+    margin-bottom: 0;
+  }
+
+  .language-grid {
+    display: grid;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .language-card {
+    position: relative;
+
+    min-height: 260px;
+
+    padding: var(--space-4);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    border: 1px solid
+      var(--color-border);
+
+    transition:
+      transform var(--transition-base),
+      border-color var(--transition-base);
+  }
+
+  .language-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .japanese-card:hover {
+    border-color:
+      var(--color-language);
+  }
+
+  .korean-card:hover {
+    border-color:
+      var(--color-japan);
+  }
+
+  .language-number {
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .language-label {
+    margin-bottom: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+
+  .language-card h3 {
+    margin-bottom: var(--space-1);
+  }
+
+  .language-card p {
+    max-width: 360px;
+    margin-bottom: 0;
+
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .language-arrow {
+    position: absolute;
+
+    right: var(--space-3);
+    bottom: var(--space-3);
+
+    font-size: 1.2rem;
+
+    transition:
+      transform var(--transition-base);
+  }
+
+  .language-card:hover
+    .language-arrow {
+    transform: translateX(4px);
+  }
+
+  .language-section {
+    border-top: 1px solid
+      var(--color-border);
+  }
+
+  .korean-section {
+    background: var(--color-surface);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-4);
+
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .section-header h2 {
+    margin-bottom: 0;
+  }
+
+  .post-count {
+    color: var(--color-text-muted);
+
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 767px) {
+    .language-hero {
+      padding-block: var(--space-6);
+    }
+
+    .language-hero h1 {
+      font-size: clamp(
+        3rem,
+        14vw,
+        4rem
+      );
+    }
+
+    .hero-note {
+      display: none;
+    }
+
+    .language-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .language-card {
+      min-height: 220px;
+      padding: var(--space-3);
+    }
+
+    .section-header {
+      align-items: start;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+  }
+</style>

@@ -1,0 +1,152 @@
+---
+import { getCollection, render } from "astro:content";
+import ArticleLayout from "../layouts/ArticleLayout.astro";
+import WorkLayout from "../layouts/WorkLayout.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection(
+    "blog",
+    ({ data }) => !data.draft
+  );
+
+  const sortedPosts = posts.sort(
+    (a, b) =>
+      a.data.publishedDate.getTime() -
+      b.data.publishedDate.getTime()
+  );
+
+  return sortedPosts.map((post, index) => {
+    const previousPost =
+      index > 0
+        ? sortedPosts[index - 1]
+        : undefined;
+
+    const nextPost =
+      index < sortedPosts.length - 1
+        ? sortedPosts[index + 1]
+        : undefined;
+
+    return {
+      params: {
+        slug: post.id.replace(/\.mdx?$/, ""),
+      },
+
+      props: {
+        post,
+        previousPost,
+        nextPost,
+      },
+    };
+  });
+}
+
+const {
+  post,
+  previousPost,
+  nextPost,
+} = Astro.props;
+
+const { Content, headings } =
+  await render(post);
+
+const previousArticle = previousPost
+  ? {
+      title: previousPost.data.title,
+      href: `/${previousPost.id.replace(
+        /\.mdx?$/,
+        ""
+      )}/`,
+    }
+  : undefined;
+
+const nextArticle = nextPost
+  ? {
+      title: nextPost.data.title,
+      href: `/${nextPost.id.replace(
+        /\.mdx?$/,
+        ""
+      )}/`,
+    }
+  : undefined;
+
+const categoryLabels: Record<
+  string,
+  string
+> = {
+  language: "LANGUAGE",
+  "japan-wh": "JAPAN WH",
+  taiwan: "TAIWAN",
+  works: "WORKS",
+};
+const projectTypeLabels = {
+  "web-design": "WEB DESIGN",
+  "web-development": "WEB DEVELOPMENT",
+  "graphic-design": "GRAPHIC DESIGN",
+  motion: "MOTION",
+  "personal-project": "PERSONAL PROJECT",
+};
+
+const projectTypeLabel =
+  post.data.projectType
+    ? projectTypeLabels[
+        post.data.projectType as keyof typeof projectTypeLabels
+      ]
+    : "PROJECT";
+
+const categoryLabel =
+  categoryLabels[post.data.category] ??
+  post.data.category.toUpperCase();
+
+const breadcrumb = [
+  {
+    label: categoryLabel,
+    href: `/${post.data.category}/`,
+  },
+];
+
+if (post.data.subcategory) {
+  breadcrumb.push({
+    label:
+      post.data.subcategory.toUpperCase(),
+    href: `/${post.data.category}/${post.data.subcategory}/`,
+  });
+}
+
+breadcrumb.push({
+  label: post.data.title,
+});
+---
+{
+  post.data.category === "works" ? (
+    <WorkLayout
+      title={post.data.title}
+      description={post.data.description}
+      projectType={projectTypeLabel}
+      year={post.data.year}
+      role={post.data.role}
+      image={post.data.image}
+      imageAlt={post.data.imageAlt}
+      headings={headings}
+    >
+      <Content />
+    </WorkLayout>
+  ) : (
+    <ArticleLayout
+      title={post.data.title}
+      description={post.data.description}
+      category={categoryLabel}
+      date={post.data.publishedDate.toLocaleDateString(
+        "zh-TW"
+      )}
+      readTime={post.data.readTime}
+      breadcrumb={breadcrumb}
+      headings={headings}
+      image={post.data.image}
+      imageAlt={post.data.imageAlt}
+      previousArticle={previousArticle}
+      nextArticle={nextArticle}
+    >
+      <Content />
+    </ArticleLayout>
+  )
+}

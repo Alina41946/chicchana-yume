@@ -104,15 +104,14 @@ imageAlt: "日本春天櫻花散步",
   }
 
   .month-nav {
-    margin-bottom: var(--space-4);
-    padding-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
 
-    display: flex;
-    gap: var(--space-3);
-    overflow-x: auto;
+  display: flex;
+  gap: var(--space-3);
 
-    border-bottom: 1px solid var(--color-border);
-  }
+  border-bottom: 1px solid var(--color-border);
+}
 
   .month-nav span {
     position: relative;
@@ -151,7 +150,34 @@ imageAlt: "日本春天櫻花散步",
       grid-template-columns: repeat(2, 1fr);
     }
   }
+  @media (max-width: 1100px) {
+  .diary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 
+@media (max-width: 767px) {
+  .section-header {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .month-nav {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .month-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .diary-grid {
+    grid-template-columns: 1fr;
+  }
+}
   @media (max-width: 600px) {
     .section-header {
       align-items: start;

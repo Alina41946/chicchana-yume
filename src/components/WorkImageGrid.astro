@@ -1,0 +1,70 @@
+---
+interface Props {
+  caption?: string;
+}
+
+const {
+  caption,
+} = Astro.props;
+---
+
+<figure class="work-image-grid">
+  <div class="work-image-grid-inner">
+    <slot />
+  </div>
+
+  {
+    caption && (
+      <figcaption>
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .work-image-grid {
+    width: 100%;
+
+    margin:
+      var(--space-5)
+      0
+      var(--space-6);
+  }
+
+  .work-image-grid-inner {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: var(--space-2);
+  }
+
+  .work-image-grid-inner :global(.work-image) {
+    margin: 0;
+  }
+
+  .work-image-grid figcaption {
+    margin-top: var(--space-1);
+
+    color: var(--color-text-muted);
+
+    font-size: 0.75rem;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  @media (max-width: 767px) {
+    .work-image-grid {
+      margin:
+        var(--space-4)
+        0
+        var(--space-5);
+    }
+
+    .work-image-grid-inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
