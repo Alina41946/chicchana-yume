@@ -49,6 +49,8 @@ const regions = [
     value: "islands",
   },
 ];
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout
@@ -162,7 +164,7 @@ const regions = [
                   category={post.data.location ?? "TAIWAN"}
                   date={post.data.publishedDate.toLocaleDateString("zh-TW")}
                   readTime={post.data.readTime}
-                  href={`/${post.id.replace(/\.mdx?$/, "")}/`}
+                  href={`${base}${post.id.replace(/\.mdx?$/, "")}/`}
                   image={post.data.image}
                   imageAlt={post.data.imageAlt ?? ""}
                   accent="var(--color-taiwan)"

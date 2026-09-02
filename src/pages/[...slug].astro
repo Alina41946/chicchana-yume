@@ -49,10 +49,12 @@ const {
 const { Content, headings } =
   await render(post);
 
+  const base = import.meta.env.BASE_URL;
+
 const previousArticle = previousPost
   ? {
       title: previousPost.data.title,
-      href: `/${previousPost.id.replace(
+      href: `${base}${previousPost.id.replace(
         /\.mdx?$/,
         ""
       )}/`,
@@ -62,7 +64,7 @@ const previousArticle = previousPost
 const nextArticle = nextPost
   ? {
       title: nextPost.data.title,
-      href: `/${nextPost.id.replace(
+      href: `${base}${nextPost.id.replace(
         /\.mdx?$/,
         ""
       )}/`,
@@ -100,7 +102,7 @@ const categoryLabel =
 const breadcrumb = [
   {
     label: categoryLabel,
-    href: `/${post.data.category}/`,
+    href: `${base}${post.data.category}/`,
   },
 ];
 
@@ -108,7 +110,7 @@ if (post.data.subcategory) {
   breadcrumb.push({
     label:
       post.data.subcategory.toUpperCase(),
-    href: `/${post.data.category}/${post.data.subcategory}/`,
+    href: `${base}${post.data.category}/${post.data.subcategory}/`,
   });
 }
 

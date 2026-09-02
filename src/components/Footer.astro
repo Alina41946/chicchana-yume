@@ -18,34 +18,52 @@ const base = import.meta.env.BASE_URL;
     <div class="footer-links">
       <div>
         <h2>EXPLORE</h2>
+
         <ul>
-  <li><a href={`${base}language/`}>Language</a></li>
-  <li><a href={`${base}japan-wh/`}>Japan WH</a></li>
-  <li><a href={`${base}taiwan/`}>Taiwan</a></li>
-  <li><a href={`${base}works/`}>Works</a></li>
-</ul>
+          <li>
+            <a href={`${base}language/`}>
+              Language
+            </a>
+          </li>
+
+          <li>
+            <a href={`${base}japan-wh/`}>
+              Japan WH
+            </a>
+          </li>
+
+          <li>
+            <a href={`${base}taiwan/`}>
+              Taiwan
+            </a>
+          </li>
+
+          <li>
+            <a href={`${base}works/`}>
+              Works
+            </a>
+          </li>
+        </ul>
       </div>
 
       <div>
         <h2>INFORMATION</h2>
-        <ul>
-  <li><a href={`${base}about/`}>About</a></li>
-  <li><a href={`${base}contact/`}>Contact</a></li>
-</ul>
-      </div>
 
-      <div>
-        <h2>LEGAL</h2>
         <ul>
-  <li><a href={`${base}privacy/`}>Privacy Policy</a></li>
-  <li><a href={`${base}sitemap/`}>Sitemap</a></li>
-</ul>
+          <li>
+            <a href={`${base}about/`}>
+              About
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 
   <div class="container footer-bottom">
-    <small>© 2026 ちっちゃな夢. All rights reserved.</small>
+    <small>
+      © 2026 ちっちゃな夢. All rights reserved.
+    </small>
   </div>
 </footer>
 
@@ -53,6 +71,7 @@ const base = import.meta.env.BASE_URL;
   .site-footer {
     margin-top: var(--space-7);
     padding-block: var(--space-6) var(--space-3);
+
     border-top: 1px solid var(--color-border);
     background: var(--color-surface);
   }
@@ -65,6 +84,7 @@ const base = import.meta.env.BASE_URL;
 
   .brand-name {
     margin-bottom: var(--space-2);
+
     font-family: var(--font-serif);
     font-size: 1.1rem;
     line-height: 1.7;
@@ -73,18 +93,20 @@ const base = import.meta.env.BASE_URL;
   .footer-description {
     max-width: 360px;
     margin: 0;
+
     color: var(--color-text-muted);
     font-size: 0.875rem;
   }
 
   .footer-links {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-4);
   }
 
   .footer-links h2 {
     margin-bottom: var(--space-2);
+
     font-family: var(--font-sans);
     font-size: 0.75rem;
     letter-spacing: 0.08em;
@@ -96,8 +118,10 @@ const base = import.meta.env.BASE_URL;
   }
 
   .footer-links a {
-    font-size: 0.875rem;
     color: var(--color-text-muted);
+
+    font-size: 0.875rem;
+
     transition: color var(--transition-base);
   }
 
@@ -108,7 +132,9 @@ const base = import.meta.env.BASE_URL;
   .footer-bottom {
     margin-top: var(--space-5);
     padding-top: var(--space-3);
+
     border-top: 1px solid var(--color-border);
+
     color: var(--color-text-muted);
   }
 

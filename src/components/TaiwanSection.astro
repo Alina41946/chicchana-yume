@@ -16,6 +16,8 @@ const taiwanPosts = posts
       a.data.publishedDate.getTime()
   )
   .slice(0, 2);
+
+  const base = import.meta.env.BASE_URL;
 ---
 
 <section class="section taiwan-section">
@@ -30,7 +32,7 @@ const taiwanPosts = posts
         <h2>Travel Around Taiwan</h2>
       </div>
 
-      <a href="/taiwan/" class="view-all">
+      <a href={`${base}taiwan/`} class="view-all">
         EXPLORE TAIWAN
         <span aria-hidden="true">→</span>
       </a>
@@ -56,7 +58,7 @@ const taiwanPosts = posts
 >
   <a
     class="region north"
-    href="/taiwan/?region=north"
+    href={`${base}taiwan/?region=north`}
   >
     <span class="region-en">
       NORTH
@@ -69,7 +71,7 @@ const taiwanPosts = posts
 
   <a
     class="region central"
-    href="/taiwan/?region=central"
+    href={`${base}taiwan/?region=central`}
   >
     <span class="region-en">
       CENTRAL
@@ -82,7 +84,7 @@ const taiwanPosts = posts
 
   <a
     class="region south"
-    href="/taiwan/?region=south"
+    href={`${base}taiwan/?region=south`}
   >
     <span class="region-en">
       SOUTH
@@ -95,7 +97,7 @@ const taiwanPosts = posts
 
   <a
     class="region east"
-    href="/taiwan/?region=east"
+    href={`${base}taiwan/?region=east`}
   >
     <span class="region-en">
       EAST
@@ -108,7 +110,7 @@ const taiwanPosts = posts
 
   <a
     class="region islands"
-    href="/taiwan/?region=islands"
+    href={`${base}taiwan/?region=islands`}
   >
     <span class="region-en">
       ISLANDS
@@ -140,7 +142,7 @@ const taiwanPosts = posts
                   title={post.data.title}
                   location={post.data.location ?? "TAIWAN"}
                   excerpt={post.data.description}
-                  href={`/${post.id.replace(/\.mdx?$/, "")}/`}
+                  href={`${base}${post.id.replace(/\.mdx?$/, "")}/`}
                   image={post.data.image}
                   imageAlt={post.data.imageAlt ?? ""}
                 />

@@ -17,6 +17,8 @@ const koreanPosts = posts.sort(
     b.data.publishedDate.getTime() -
     a.data.publishedDate.getTime()
 );
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout
@@ -34,12 +36,12 @@ const koreanPosts = posts.sort(
         >
           <ol>
             <li>
-              <a href="/">HOME</a>
+              <a href={base}>HOME</a>
             </li>
 
             <li>
               <span aria-hidden="true">/</span>
-              <a href="/language/">
+              <a href={`${base}language/`}>
                 LANGUAGE
               </a>
             </li>

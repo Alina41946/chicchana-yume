@@ -54,6 +54,8 @@ const articleItems = sortedPosts.map((post) => {
     category,
   };
 });
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout
@@ -112,10 +114,10 @@ const articleItems = sortedPosts.map((post) => {
           "zh-TW"
         )}
         readTime={post.data.readTime}
-        href={`/${post.id.replace(
-          /\.mdx?$/,
-          ""
-        )}/`}
+        href={`${base}${post.id.replace(
+  /\.mdx?$/,
+  ""
+)}/`}
         image={post.data.image}
         imageAlt={post.data.imageAlt ?? ""}
         accent={category.accent}

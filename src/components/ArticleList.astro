@@ -40,6 +40,8 @@ const categoryInfo = {
     accent: "var(--color-works)",
   },
 };
+
+const base = import.meta.env.BASE_URL;
 ---
 
 {
@@ -64,10 +66,10 @@ const categoryInfo = {
                 "zh-TW"
               )}
               readTime={post.data.readTime}
-              href={`/${post.id.replace(
-                /\.mdx?$/,
-                ""
-              )}/`}
+              href={`${base}${post.id.replace(
+  /\.mdx?$/,
+  ""
+)}/`}
               image={post.data.image}
               imageAlt={
                 post.data.imageAlt ?? ""
