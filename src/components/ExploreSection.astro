@@ -25,14 +25,15 @@ const categories = [
     href: `${base}taiwan/`,
     accent: "var(--color-taiwan)",
   },
-  {
-    number: "04",
-    title: "WORKS",
-    subtitle: "Web、UI、Graphic 與設計作品",
-    href: `${base}works/`,
-    accent: "var(--color-works)",
-  },
 ];
+
+const worksCategory = {
+  number: "04",
+  title: "WORKS",
+  subtitle: "Web、UI、Graphic 與設計作品",
+  href: `${base}works/`,
+  accent: "var(--color-works)",
+};
 ---
 
 <section id="explore" class="section explore-section">
@@ -48,6 +49,13 @@ const categories = [
           <CategoryCard {...category} />
         ))
       }
+
+      <div
+        class="portfolio-category"
+        hidden
+      >
+        <CategoryCard {...worksCategory} />
+      </div>
     </div>
   </div>
 </section>
@@ -59,7 +67,9 @@ const categories = [
 
   .section-eyebrow {
     margin-bottom: var(--space-1);
+
     color: var(--color-text-muted);
+
     font-size: 0.75rem;
     letter-spacing: 0.15em;
   }
@@ -70,21 +80,47 @@ const categories = [
 
   .category-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+
     gap: var(--space-3);
   }
 
-  /* Tablet */
+  .portfolio-category[hidden] {
+    display: none;
+  }
+
   @media (max-width: 1100px) {
     .category-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
     }
   }
 
-  /* Mobile */
   @media (max-width: 767px) {
     .category-grid {
       grid-template-columns: 1fr;
     }
   }
 </style>
+
+<script>
+  const portfolioStorageKey =
+    "chicchana-yume-portfolio-mode";
+
+  const isPortfolioMode =
+    sessionStorage.getItem(
+      portfolioStorageKey
+    ) === "true";
+
+  if (isPortfolioMode) {
+    const portfolioCategory =
+      document.querySelector(
+        ".portfolio-category"
+      );
+
+    portfolioCategory?.removeAttribute(
+      "hidden"
+    );
+  }
+</script>

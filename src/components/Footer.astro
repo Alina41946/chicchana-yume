@@ -11,7 +11,7 @@ const base = import.meta.env.BASE_URL;
       </p>
 
       <p class="footer-description">
-        語言學習、日本一年打工度假、台灣旅遊與設計作品的個人網站。
+        語言學習、日本一年打工度假與台灣旅遊的個人網站。
       </p>
     </div>
 
@@ -38,7 +38,10 @@ const base = import.meta.env.BASE_URL;
             </a>
           </li>
 
-          <li>
+          <li
+            class="portfolio-footer-item"
+            hidden
+          >
             <a href={`${base}works/`}>
               Works
             </a>
@@ -129,6 +132,10 @@ const base = import.meta.env.BASE_URL;
     color: var(--color-text);
   }
 
+  .portfolio-footer-item[hidden] {
+    display: none;
+  }
+
   .footer-bottom {
     margin-top: var(--space-5);
     padding-top: var(--space-3);
@@ -154,3 +161,24 @@ const base = import.meta.env.BASE_URL;
     }
   }
 </style>
+
+<script>
+  const portfolioStorageKey =
+    "chicchana-yume-portfolio-mode";
+
+  const isPortfolioMode =
+    sessionStorage.getItem(
+      portfolioStorageKey
+    ) === "true";
+
+  if (isPortfolioMode) {
+    const portfolioFooterItems =
+      document.querySelectorAll(
+        ".portfolio-footer-item"
+      );
+
+    portfolioFooterItems.forEach((item) => {
+      item.removeAttribute("hidden");
+    });
+  }
+</script>

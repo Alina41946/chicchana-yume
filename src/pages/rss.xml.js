@@ -2,7 +2,10 @@ import rss from '@astrojs/rss';
 import {getCollection} from 'astro:content';
 
 export async function GET(context) {
-  const posts = await getCollection('blog', ({data}) => !data.draft);
+  const posts = await getCollection(
+    'blog',
+    ({data}) => !data.draft && data.category !== 'works',
+  );
 
   const sortedPosts = posts.sort(
     (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime(),
@@ -16,7 +19,7 @@ export async function GET(context) {
 
   return rss({
     title: 'ちっちゃな私には、ちっちゃな夢があります。',
-    description: '語言學習、日本一年打工度假、台灣旅遊與設計作品的個人網站。',
+    description: '語言學習、日本一年打工度假與台灣旅遊的個人網站。',
 
     site: siteURL,
 

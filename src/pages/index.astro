@@ -12,16 +12,55 @@ import Newsletter from "../components/Newsletter.astro";
 
 <Layout
   title="ちっちゃな私には、ちっちゃな夢があります。"
-  description="語言學習、日本一年打工度假、台灣旅遊與設計作品的個人網站。"
+  description="語言學習、日本一年打工度假與台灣旅遊的個人網站。"
 >
   <main>
     <Hero />
-	 <ExploreSection />
-	<LanguageSection />
-	 <JapanDiarySection />
-	 <TaiwanSection />
-	 <WorksSection />
-	 <AboutTeaser />
-  	<Newsletter />
+
+    <ExploreSection />
+
+    <LanguageSection />
+
+    <JapanDiarySection />
+
+    <TaiwanSection />
+
+    <div
+      class="portfolio-home-section"
+      hidden
+    >
+      <WorksSection />
+    </div>
+
+    <AboutTeaser />
+
+    <Newsletter />
   </main>
 </Layout>
+
+<style>
+  .portfolio-home-section[hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  const portfolioStorageKey =
+    "chicchana-yume-portfolio-mode";
+
+  const isPortfolioMode =
+    sessionStorage.getItem(
+      portfolioStorageKey
+    ) === "true";
+
+  if (isPortfolioMode) {
+    const portfolioHomeSection =
+      document.querySelector(
+        ".portfolio-home-section"
+      );
+
+    portfolioHomeSection?.removeAttribute(
+      "hidden"
+    );
+  }
+</script>

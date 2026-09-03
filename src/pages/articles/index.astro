@@ -6,7 +6,9 @@ import ArticleCard from "../../components/ArticleCard.astro";
 
 const posts = await getCollection(
   "blog",
-  ({ data }) => !data.draft
+  ({ data }) =>
+    !data.draft &&
+    data.category !== "works"
 );
 
 const sortedPosts = posts.sort(
@@ -30,18 +32,12 @@ const categoryInfo = {
     label: "台灣旅行",
     accent: "var(--color-taiwan)",
   },
-
-  works: {
-    label: "設計作品",
-    accent: "var(--color-works)",
-  },
 };
 const filters = [
   { label: "ALL", value: "all" },
   { label: "LANGUAGE", value: "language" },
   { label: "JAPAN WH", value: "japan-wh" },
   { label: "TAIWAN", value: "taiwan" },
-  { label: "WORKS", value: "works" },
 ];
 const articleItems = sortedPosts.map((post) => {
   const category =
@@ -60,7 +56,7 @@ const base = import.meta.env.BASE_URL;
 
 <Layout
   title="Articles｜ちっちゃな私には、ちっちゃな夢があります。"
-  description="語言學習、日本打工度假、台灣旅行與設計作品的文章紀錄。"
+  description="語言學習、日本打工度假與台灣旅行的文章紀錄。"
 >
   <main class="articles-page">
 
@@ -73,7 +69,7 @@ const base = import.meta.env.BASE_URL;
         <h1>All Stories</h1>
 
         <p class="page-description">
-          語言學習、日本生活、台灣旅行與設計作品的紀錄。
+           語言學習、日本生活與台灣旅行的紀錄。
         </p>
       </div>
     </section>
