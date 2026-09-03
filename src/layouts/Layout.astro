@@ -16,13 +16,15 @@ interface Props {
 
 const {
   title = "ちっちゃな私には、ちっちゃな夢があります。",
-  description = "語言學習、日本一年打工度假、台灣旅遊與設計作品的個人網站。",
+  description = "語言學習、日本一年打工度假與台灣旅遊的個人網站。",
   image,
   type = "website",
   noindex = false,
 } = Astro.props;
 
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.endsWith("/")
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
 
 const imageSrc =
   typeof image === "string"
@@ -30,16 +32,22 @@ const imageSrc =
     : image?.src;
 
 /*
- * 確保 base path 只出現一次。
  * GitHub Pages：
  * https://alina41946.github.io/chicchana-yume/...
+ *
+ * base：
+ * /chicchana-yume/
  */
-const currentPath = Astro.url.pathname.startsWith(base)
-  ? Astro.url.pathname.slice(base.length)
-  : Astro.url.pathname.replace(/^\//, "");
+const currentPath =
+  Astro.url.pathname.startsWith(base)
+    ? Astro.url.pathname.slice(base.length)
+    : Astro.url.pathname.replace(/^\//, "");
 
 const canonicalURL = Astro.site
-  ? new URL(`${base}${currentPath}`, Astro.site).href
+  ? new URL(
+      `${base}${currentPath}`,
+      Astro.site
+    ).href
   : Astro.url.href;
 
 const absoluteImageURL =
@@ -49,7 +57,10 @@ const absoluteImageURL =
       : new URL(
           imageSrc.startsWith(base)
             ? imageSrc
-            : `${base}${imageSrc.replace(/^\//, "")}`,
+            : `${base}${imageSrc.replace(
+                /^\//,
+                ""
+              )}`,
           Astro.site
         ).href
     : imageSrc;
@@ -64,16 +75,18 @@ const absoluteImageURL =
       name="viewport"
       content="width=device-width, initial-scale=1"
     />
-    <link
-  rel="icon"
-  type="image/svg+xml"
-  href={`${import.meta.env.BASE_URL}/favicon.svg`}
-/>
 
-<link
-  rel="icon"
-  href={`${import.meta.env.BASE_URL}/favicon.ico`}
-/>
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href={`${base}favicon.svg`}
+    />
+
+    <link
+      rel="icon"
+      href={`${base}favicon.ico`}
+    />
 
     <!-- Basic SEO -->
     <title>{title}</title>
@@ -82,10 +95,11 @@ const absoluteImageURL =
       name="description"
       content={description}
     />
+
     <link
-  rel="canonical"
-  href={canonicalURL}
-/>
+      rel="canonical"
+      href={canonicalURL}
+    />
 
     <meta
       name="robots"
@@ -111,10 +125,11 @@ const absoluteImageURL =
       property="og:type"
       content={type}
     />
+
     <meta
-  property="og:url"
-  content={canonicalURL}
-/>
+      property="og:url"
+      content={canonicalURL}
+    />
 
     <meta
       property="og:locale"
@@ -127,23 +142,23 @@ const absoluteImageURL =
     />
 
     {
-  absoluteImageURL && (
-    <meta
-      property="og:image"
-      content={absoluteImageURL}
-    />
-  )
-}
+      absoluteImageURL && (
+        <meta
+          property="og:image"
+          content={absoluteImageURL}
+        />
+      )
+    }
 
     <!-- Twitter / Social Card -->
-   <meta
-  name="twitter:card"
-  content={
-    absoluteImageURL
-      ? "summary_large_image"
-      : "summary"
-  }
-/>
+    <meta
+      name="twitter:card"
+      content={
+        absoluteImageURL
+          ? "summary_large_image"
+          : "summary"
+      }
+    />
 
     <meta
       name="twitter:title"
@@ -156,13 +171,21 @@ const absoluteImageURL =
     />
 
     {
-  absoluteImageURL && (
-    <meta
-      name="twitter:image"
-      content={absoluteImageURL}
+      absoluteImageURL && (
+        <meta
+          name="twitter:image"
+          content={absoluteImageURL}
+        />
+      )
+    }
+
+    <!-- RSS -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="ちっちゃな私には、ちっちゃな夢があります。"
+      href={`${base}rss.xml`}
     />
-  )
-}
 
     <!-- Fonts -->
     <link
