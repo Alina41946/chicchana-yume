@@ -28,20 +28,19 @@ const categories = [
     accent: "var(--color-taiwan)",
   },
 ];
-
-const worksCategory = {
-  number: "04",
-  title: "WORKS",
-  subtitle: "Web、UI、Graphic 與設計作品",
-  href: `${base}works/`,
-  accent: "var(--color-works)",
-};
 ---
 
-<section id="explore" class="section explore-section">
+<section
+  id="explore"
+  class="section explore-section"
+  data-base={base}
+>
   <div class="container">
     <div class="section-heading">
-      <p class="section-eyebrow">EXPLORE</p>
+      <p class="section-eyebrow">
+        EXPLORE
+      </p>
+
       <h2>Explore My World</h2>
     </div>
 
@@ -51,13 +50,6 @@ const worksCategory = {
           <CategoryCard {...category} />
         ))
       }
-
-      <div
-        class="portfolio-category"
-        hidden
-      >
-        <CategoryCard {...worksCategory} />
-      </div>
     </div>
   </div>
 </section>
@@ -80,27 +72,42 @@ const worksCategory = {
     margin-bottom: 0;
   }
 
+  /*
+   * 一般模式：
+   * 3 張卡平均填滿
+   */
   .category-grid {
     display: grid;
+
     grid-template-columns:
-      repeat(4, minmax(0, 1fr));
+      repeat(3, minmax(0, 1fr));
 
     gap: var(--space-3);
   }
 
-  .portfolio-category[hidden] {
-    display: none;
+  /*
+   * Portfolio Mode：
+   * 加入第 4 張後改成四欄
+   */
+  .explore-section.is-portfolio
+    .category-grid {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
   }
 
   @media (max-width: 1100px) {
-    .category-grid {
+    .category-grid,
+    .explore-section.is-portfolio
+      .category-grid {
       grid-template-columns:
         repeat(2, minmax(0, 1fr));
     }
   }
 
   @media (max-width: 767px) {
-    .category-grid {
+    .category-grid,
+    .explore-section.is-portfolio
+      .category-grid {
       grid-template-columns: 1fr;
     }
   }
@@ -116,13 +123,79 @@ const worksCategory = {
     ) === "true";
 
   if (isPortfolioMode) {
-    const portfolioCategory =
-      document.querySelector(
-        ".portfolio-category"
+    const exploreSection =
+      document.querySelector<HTMLElement>(
+        ".explore-section"
       );
 
-    portfolioCategory?.removeAttribute(
-      "hidden"
-    );
+    const categoryGrid =
+      exploreSection?.querySelector(
+        ".category-grid"
+      );
+
+    const firstCard =
+      categoryGrid?.querySelector<HTMLAnchorElement>(
+        ".category-card"
+      );
+
+    const base =
+      exploreSection?.dataset.base ?? "/";
+
+    if (
+      exploreSection &&
+      categoryGrid &&
+      firstCard
+    ) {
+      exploreSection.classList.add(
+        "is-portfolio"
+      );
+
+      /*
+       * 複製既有 CategoryCard，
+       * 所以視覺、hover、RWD
+       * 全部與原本卡片一致。
+       */
+      const portfolioCard =
+        firstCard.cloneNode(
+          true
+        ) as HTMLAnchorElement;
+
+      portfolioCard.href =
+        `${base}works/`;
+
+      portfolioCard.style.setProperty(
+        "--accent",
+        "var(--color-works)"
+      );
+
+      const number =
+        portfolioCard.querySelector(
+          ".category-number"
+        );
+
+      const title =
+        portfolioCard.querySelector("h3");
+
+      const subtitle =
+        portfolioCard.querySelector("p");
+
+      if (number) {
+        number.textContent = "04";
+      }
+
+      if (title) {
+        title.textContent =
+          "PORTFOLIO";
+      }
+
+      if (subtitle) {
+        subtitle.textContent =
+          "Web、UI、Graphic 與設計作品";
+      }
+
+      categoryGrid.appendChild(
+        portfolioCard
+      );
+    }
   }
 </script>

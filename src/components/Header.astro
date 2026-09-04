@@ -8,59 +8,60 @@ const navItems = [
   { label: "LANGUAGE", href: `${base}language/` },
   { label: "JAPAN WH", href: `${base}japan-wh/` },
   { label: "TAIWAN", href: `${base}taiwan/` },
-  { label: "WORKS", href: `${base}works/`, portfolioOnly: true },
   { label: "ABOUT", href: `${base}about/` },
 ];
 ---
 
-<header class="site-header">
+<header
+  class="site-header"
+  data-base={base}
+>
   <div class="container header-inner">
 
-    <a class="site-brand" href={base} aria-label="回首頁">
+    <a
+      class="site-brand"
+      href={base}
+      aria-label="回首頁"
+    >
       <span>ちっちゃな私には、</span>
       <span>ちっちゃな夢があります。</span>
     </a>
 
-    <nav class="desktop-nav" aria-label="主要導覽">
-      <ul>
-        {
-          navItems.map((item) => (
-            <li
-              class:list={[
-                {
-                  "portfolio-nav-item":
-                    item.portfolioOnly,
-                },
-              ]}
-              hidden={item.portfolioOnly}
-            >
-              <a href={item.href}>
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-
-    <div class="header-actions">
-      <button
-        class="icon-button"
-        type="button"
-        aria-label="搜尋"
+    <div class="header-right">
+      <nav
+        class="desktop-nav"
+        aria-label="主要導覽"
       >
-        ⌕
-      </button>
+        <ul>
+          {
+            navItems.map((item) => (
+              <li>
+                <a href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
 
-      <button
-        class="menu-button"
-        type="button"
-        aria-label="開啟選單"
-        aria-controls="mobile-menu"
-        aria-expanded="false"
-      >
-        ☰
-      </button>
+      <div
+        class="portfolio-entry"
+        aria-label="作品集入口"
+      ></div>
+
+      <div class="header-actions">
+        
+        <button
+          class="menu-button"
+          type="button"
+          aria-label="開啟選單"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+        >
+          ☰
+        </button>
+      </div>
     </div>
 
   </div>
@@ -74,15 +75,7 @@ const navItems = [
       <ul>
         {
           navItems.map((item) => (
-            <li
-              class:list={[
-                {
-                  "portfolio-nav-item":
-                    item.portfolioOnly,
-                },
-              ]}
-              hidden={item.portfolioOnly}
-            >
+            <li>
               <a href={item.href}>
                 {item.label}
               </a>
@@ -90,6 +83,10 @@ const navItems = [
           ))
         }
       </ul>
+
+      <div
+        class="mobile-portfolio-entry"
+      ></div>
     </nav>
   </div>
 </header>
@@ -119,6 +116,13 @@ const navItems = [
     line-height: 1.5;
 
     white-space: nowrap;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+
+    gap: var(--space-3);
   }
 
   .desktop-nav ul {
@@ -159,6 +163,66 @@ const navItems = [
     transform: scaleX(1);
   }
 
+  /* Portfolio Mode */
+  .portfolio-entry:empty {
+    display: none;
+  }
+
+  .portfolio-entry :global(.portfolio-link) {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  padding-block: 0.35rem;
+
+  color: var(--color-works);
+
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+
+.portfolio-entry :global(.portfolio-link)::after {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  height: 1px;
+
+  background: var(--color-works);
+
+  transform: scaleX(0.25);
+  transform-origin: left;
+
+  transition:
+    transform var(--transition-base);
+}
+
+.portfolio-entry :global(.portfolio-link:hover)::after,
+.portfolio-entry :global(.portfolio-link:focus-visible)::after {
+  transform: scaleX(1);
+}
+
+.portfolio-entry :global(.portfolio-arrow) {
+  font-size: 0.85rem;
+  line-height: 1;
+
+  transition:
+    transform var(--transition-base);
+}
+
+.portfolio-entry
+  :global(.portfolio-link:hover .portfolio-arrow) {
+  transform: translate(2px, -2px);
+}
+
+
   .header-actions {
     display: flex;
     align-items: center;
@@ -166,8 +230,7 @@ const navItems = [
     gap: var(--space-1);
   }
 
-  .icon-button,
-  .menu-button {
+    .menu-button {
     width: 44px;
     height: 44px;
 
@@ -212,13 +275,45 @@ const navItems = [
     letter-spacing: 0.05em;
   }
 
-  .mobile-menu[hidden],
-  .portfolio-nav-item[hidden] {
+  .mobile-menu[hidden] {
     display: none;
   }
 
+  /* Mobile Portfolio */
+  .mobile-portfolio-entry:empty {
+    display: none;
+  }
+
+  .mobile-portfolio-entry:not(:empty) {
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+
+    border-top: 1px solid var(--color-border);
+  }
+
+  .mobile-portfolio-entry
+    :global(.portfolio-link) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-block: 0.6rem;
+
+    color: var(--color-works);
+
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .mobile-portfolio-entry
+    :global(.portfolio-arrow) {
+    font-size: 1rem;
+  }
+
   @media (max-width: 1100px) {
-    .desktop-nav {
+    .desktop-nav,
+    .portfolio-entry {
       display: none;
     }
 
@@ -272,24 +367,79 @@ const navItems = [
       portfolioStorageKey
     ) === "true";
 
+  const siteHeader =
+    document.querySelector<HTMLElement>(
+      ".site-header"
+    );
+
+  const base =
+    siteHeader?.dataset.base ?? "/";
+
+  /*
+   * Portfolio Mode
+   * 一般 HTML 不輸出 Works URL。
+   * 僅在 Portfolio Mode 動態建立。
+   */
   if (isPortfolioMode) {
-    const portfolioNavItems =
-      document.querySelectorAll(
-        ".portfolio-nav-item"
+    const createPortfolioLink = () => {
+      const link =
+        document.createElement("a");
+
+      link.href = `${base}works/`;
+      link.className = "portfolio-link";
+      link.setAttribute(
+        "aria-label",
+        "前往 Portfolio"
       );
 
-    portfolioNavItems.forEach((item) => {
-      item.removeAttribute("hidden");
-    });
+      const label =
+        document.createElement("span");
+
+      label.textContent = "PORTFOLIO";
+
+      const arrow =
+        document.createElement("span");
+
+      arrow.className =
+        "portfolio-arrow";
+
+      arrow.textContent = "↗";
+      arrow.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      link.append(label, arrow);
+
+      return link;
+    };
+
+    const desktopEntry =
+      document.querySelector(
+        ".portfolio-entry"
+      );
+
+    const mobileEntry =
+      document.querySelector(
+        ".mobile-portfolio-entry"
+      );
+
+    desktopEntry?.appendChild(
+      createPortfolioLink()
+    );
+
+    mobileEntry?.appendChild(
+      createPortfolioLink()
+    );
   }
 
   const menuButton =
-    document.querySelector(
+    document.querySelector<HTMLButtonElement>(
       ".menu-button"
     );
 
   const mobileMenu =
-    document.querySelector(
+    document.querySelector<HTMLElement>(
       "#mobile-menu"
     );
 

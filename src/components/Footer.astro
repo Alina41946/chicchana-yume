@@ -4,7 +4,10 @@ const base = import.meta.env.BASE_URL.endsWith("/")
   : `${import.meta.env.BASE_URL}/`;
 ---
 
-<footer class="site-footer">
+<footer
+  class="site-footer"
+  data-base={base}
+>
   <div class="container footer-inner">
     <div class="footer-brand">
       <p class="brand-name">
@@ -39,15 +42,6 @@ const base = import.meta.env.BASE_URL.endsWith("/")
               Taiwan
             </a>
           </li>
-
-          <li
-            class="portfolio-footer-item"
-            hidden
-          >
-            <a href={`${base}works/`}>
-              Works
-            </a>
-          </li>
         </ul>
       </div>
 
@@ -61,6 +55,11 @@ const base = import.meta.env.BASE_URL.endsWith("/")
             </a>
           </li>
         </ul>
+
+        <div
+          class="footer-portfolio-entry"
+          aria-label="作品集入口"
+        ></div>
       </div>
     </div>
   </div>
@@ -134,8 +133,74 @@ const base = import.meta.env.BASE_URL.endsWith("/")
     color: var(--color-text);
   }
 
-  .portfolio-footer-item[hidden] {
+  /* Portfolio Mode */
+  .footer-portfolio-entry:empty {
     display: none;
+  }
+
+  .footer-portfolio-entry:not(:empty) {
+    margin-top: var(--space-2);
+  }
+
+  .footer-portfolio-entry
+    :global(.footer-portfolio-link) {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    padding-bottom: 0.2rem;
+
+    color: var(--color-works);
+
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .footer-portfolio-entry
+    :global(.footer-portfolio-link)::after {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 1px;
+
+    background: var(--color-works);
+
+    transform: scaleX(0.25);
+    transform-origin: left;
+
+    transition:
+      transform var(--transition-base);
+  }
+
+  .footer-portfolio-entry
+    :global(.footer-portfolio-link:hover)::after,
+  .footer-portfolio-entry
+    :global(.footer-portfolio-link:focus-visible)::after {
+    transform: scaleX(1);
+  }
+
+  .footer-portfolio-entry
+    :global(.footer-portfolio-arrow) {
+    font-size: 0.85rem;
+    line-height: 1;
+
+    transition:
+      transform var(--transition-base);
+  }
+
+  .footer-portfolio-entry
+    :global(
+      .footer-portfolio-link:hover
+      .footer-portfolio-arrow
+    ) {
+    transform: translate(2px, -2px);
   }
 
   .footer-bottom {
@@ -174,13 +239,54 @@ const base = import.meta.env.BASE_URL.endsWith("/")
     ) === "true";
 
   if (isPortfolioMode) {
-    const portfolioFooterItems =
-      document.querySelectorAll(
-        ".portfolio-footer-item"
+    const footer =
+      document.querySelector<HTMLElement>(
+        ".site-footer"
       );
 
-    portfolioFooterItems.forEach((item) => {
-      item.removeAttribute("hidden");
-    });
+    const portfolioEntry =
+      document.querySelector(
+        ".footer-portfolio-entry"
+      );
+
+    const base =
+      footer?.dataset.base ?? "/";
+
+    if (portfolioEntry) {
+      const link =
+        document.createElement("a");
+
+      link.href = `${base}works/`;
+      link.className =
+        "footer-portfolio-link";
+
+      link.setAttribute(
+        "aria-label",
+        "前往 Portfolio"
+      );
+
+      const label =
+        document.createElement("span");
+
+      label.textContent =
+        "PORTFOLIO";
+
+      const arrow =
+        document.createElement("span");
+
+      arrow.className =
+        "footer-portfolio-arrow";
+
+      arrow.textContent = "↗";
+
+      arrow.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      link.append(label, arrow);
+
+      portfolioEntry.appendChild(link);
+    }
   }
 </script>

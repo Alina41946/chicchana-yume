@@ -5,7 +5,6 @@ import ExploreSection from "../components/ExploreSection.astro";
 import LanguageSection from "../components/LanguageSection.astro";
 import JapanDiarySection from "../components/JapanDiarySection.astro";
 import TaiwanSection from "../components/TaiwanSection.astro";
-import WorksSection from "../components/WorksSection.astro";
 import AboutTeaser from "../components/AboutTeaser.astro";
 import Newsletter from "../components/Newsletter.astro";
 ---
@@ -25,42 +24,8 @@ import Newsletter from "../components/Newsletter.astro";
 
     <TaiwanSection />
 
-    <div
-      class="portfolio-home-section"
-      hidden
-    >
-      <WorksSection />
-    </div>
-
     <AboutTeaser />
 
     <Newsletter />
   </main>
 </Layout>
-
-<style>
-  .portfolio-home-section[hidden] {
-    display: none;
-  }
-</style>
-
-<script>
-  const portfolioStorageKey =
-    "chicchana-yume-portfolio-mode";
-
-  const isPortfolioMode =
-    sessionStorage.getItem(
-      portfolioStorageKey
-    ) === "true";
-
-  if (isPortfolioMode) {
-    const portfolioHomeSection =
-      document.querySelector(
-        ".portfolio-home-section"
-      );
-
-    portfolioHomeSection?.removeAttribute(
-      "hidden"
-    );
-  }
-</script>
