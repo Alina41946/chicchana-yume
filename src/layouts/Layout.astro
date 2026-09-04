@@ -34,6 +34,18 @@ const imageSrc =
     : image?.src;
 
 /*
+ * Social Sharing Image
+ *
+ * 有指定 image：
+ * → 使用該頁／文章自己的圖片
+ *
+ * 沒有指定 image：
+ * → 使用網站預設 OG 圖
+ */
+const socialImageSrc =
+  imageSrc ?? `${base}og-image.jpg`;
+
+/*
  * GitHub Pages：
  * https://alina41946.github.io/chicchana-yume/...
  *
@@ -53,19 +65,19 @@ const canonicalURL = Astro.site
   : Astro.url.href;
 
 const absoluteImageURL =
-  imageSrc && Astro.site
-    ? /^https?:\/\//.test(imageSrc)
-      ? imageSrc
+  socialImageSrc && Astro.site
+    ? /^https?:\/\//.test(socialImageSrc)
+      ? socialImageSrc
       : new URL(
-          imageSrc.startsWith(base)
-            ? imageSrc
-            : `${base}${imageSrc.replace(
+          socialImageSrc.startsWith(base)
+            ? socialImageSrc
+            : `${base}${socialImageSrc.replace(
                 /^\//,
                 ""
               )}`,
           Astro.site
         ).href
-    : imageSrc;
+    : socialImageSrc;
 ---
 
 <!doctype html>
@@ -74,28 +86,28 @@ const absoluteImageURL =
     <meta charset="UTF-8" />
 
     <meta
-  name="viewport"
-  content="width=device-width, initial-scale=1"
-/>
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
 
-<!-- Google Analytics -->
-<script
-  async
-  src="https://www.googletagmanager.com/gtag/js?id=G-1F1CKF44P8"
-></script>
+    <!-- Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-1F1CKF44P8"
+    ></script>
 
-<script is:inline>
-  window.dataLayer = window.dataLayer || [];
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
 
-  function gtag() {
-    dataLayer.push(arguments);
-  }
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
-  gtag("js", new Date());
-  gtag("config", "G-1F1CKF44P8");
-</script>
+      gtag("js", new Date());
+      gtag("config", "G-1F1CKF44P8");
+    </script>
 
-<!-- Favicon -->
+    <!-- Favicon -->
     <link
       rel="icon"
       type="image/svg+xml"
@@ -144,14 +156,15 @@ const absoluteImageURL =
       property="og:type"
       content={type}
     />
+
     {
-  type === "article" && publishedDate && (
-    <meta
-      property="article:published_time"
-      content={publishedDate.toISOString()}
-    />
-  )
-}
+      type === "article" && publishedDate && (
+        <meta
+          property="article:published_time"
+          content={publishedDate.toISOString()}
+        />
+      )
+    }
 
     <meta
       property="og:url"
@@ -170,10 +183,17 @@ const absoluteImageURL =
 
     {
       absoluteImageURL && (
-        <meta
-          property="og:image"
-          content={absoluteImageURL}
-        />
+        <>
+          <meta
+            property="og:image"
+            content={absoluteImageURL}
+          />
+
+          <meta
+            property="og:image:alt"
+            content={title}
+          />
+        </>
       )
     }
 
