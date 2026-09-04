@@ -136,12 +136,14 @@ breadcrumb.push({
     </WorkLayout>
   ) : (
     <ArticleLayout
-      title={post.data.title}
-      description={post.data.description}
-      category={categoryLabel}
-      date={post.data.publishedDate.toLocaleDateString(
-        "zh-TW"
-      )}
+  title={post.data.title}
+  description={post.data.description}
+  category={categoryLabel}
+  date={post.data.publishedDate.toLocaleDateString(
+    "zh-TW"
+  )}
+  publishedDate={post.data.publishedDate}
+  readTime={post.data.readTime}
       readTime={post.data.readTime}
       breadcrumb={breadcrumb}
       headings={headings}

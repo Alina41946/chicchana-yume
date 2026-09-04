@@ -11,6 +11,7 @@ interface Props {
   description?: string;
   image?: ImageMetadata | string;
   type?: "website" | "article";
+  publishedDate?: Date;
   noindex?: boolean;
 }
 
@@ -19,6 +20,7 @@ const {
   description = "語言學習、日本一年打工度假與台灣旅遊的個人網站。",
   image,
   type = "website",
+  publishedDate,
   noindex = false,
 } = Astro.props;
 
@@ -125,6 +127,14 @@ const absoluteImageURL =
       property="og:type"
       content={type}
     />
+    {
+  type === "article" && publishedDate && (
+    <meta
+      property="article:published_time"
+      content={publishedDate.toISOString()}
+    />
+  )
+}
 
     <meta
       property="og:url"

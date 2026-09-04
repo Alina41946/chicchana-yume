@@ -9,7 +9,8 @@ interface Props {
   description: string;
   category: string;
   date: string;
-  readTime: string;
+publishedDate: Date;
+readTime: string;
 
   image?: ImageMetadata;
   imageAlt?: string;
@@ -37,6 +38,7 @@ const {
   description,
   category,
   date,
+  publishedDate,
   readTime,
   image,
   imageAlt = "",
@@ -60,6 +62,7 @@ const base = import.meta.env.BASE_URL.endsWith("/")
   description={description}
   image={image}
   type="article"
+  publishedDate={publishedDate}
 >
   <main class="article-page">
     <article class="container article-container">
