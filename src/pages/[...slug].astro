@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from "astro:content";
+
 import ArticleLayout from "../layouts/ArticleLayout.astro";
 import WorkLayout from "../layouts/WorkLayout.astro";
 
@@ -15,20 +16,48 @@ export async function getStaticPaths() {
       b.data.publishedDate.getTime()
   );
 
-  return sortedPosts.map((post, index) => {
-    const previousPost =
-      index > 0
-        ? sortedPosts[index - 1]
-        : undefined;
+  /*
+   * 公開文章導覽用
+   *
+   * Works 屬於 Portfolio Mode，
+   * 不應該出現在一般文章的 Previous / Next。
+   */
+  const publicPosts = sortedPosts.filter(
+    (post) => post.data.category !== "works"
+  );
 
-    const nextPost =
-      index < sortedPosts.length - 1
-        ? sortedPosts[index + 1]
-        : undefined;
+  return sortedPosts.map((post) => {
+    let previousPost;
+    let nextPost;
+
+    /*
+     * 只有一般公開文章才產生文章導覽。
+     */
+    if (post.data.category !== "works") {
+      const publicIndex =
+        publicPosts.findIndex(
+          (publicPost) =>
+            publicPost.id === post.id
+        );
+
+      previousPost =
+        publicIndex > 0
+          ? publicPosts[publicIndex - 1]
+          : undefined;
+
+      nextPost =
+        publicIndex <
+        publicPosts.length - 1
+          ? publicPosts[publicIndex + 1]
+          : undefined;
+    }
 
     return {
       params: {
-        slug: post.id.replace(/\.mdx?$/, ""),
+        slug: post.id.replace(
+          /\.mdx?$/,
+          ""
+        ),
       },
 
       props: {
@@ -49,9 +78,10 @@ const {
 const { Content, headings } =
   await render(post);
 
-const base = import.meta.env.BASE_URL.endsWith("/")
-  ? import.meta.env.BASE_URL
-  : `${import.meta.env.BASE_URL}/`;
+const base =
+  import.meta.env.BASE_URL.endsWith("/")
+    ? import.meta.env.BASE_URL
+    : `${import.meta.env.BASE_URL}/`;
 
 const previousArticle = previousPost
   ? {
@@ -82,23 +112,30 @@ const categoryLabels: Record<
   taiwan: "TAIWAN",
   works: "WORKS",
 };
+
 const projectTypeLabels = {
   "web-design": "WEB DESIGN",
-  "web-development": "WEB DEVELOPMENT",
-  "graphic-design": "GRAPHIC DESIGN",
+  "web-development":
+    "WEB DEVELOPMENT",
+  "graphic-design":
+    "GRAPHIC DESIGN",
   motion: "MOTION",
-  "personal-project": "PERSONAL PROJECT",
+  "personal-project":
+    "PERSONAL PROJECT",
 };
 
 const projectTypeLabel =
   post.data.projectType
     ? projectTypeLabels[
-        post.data.projectType as keyof typeof projectTypeLabels
+        post.data
+          .projectType as keyof typeof projectTypeLabels
       ]
     : "PROJECT";
 
 const categoryLabel =
-  categoryLabels[post.data.category] ??
+  categoryLabels[
+    post.data.category
+  ] ??
   post.data.category.toUpperCase();
 
 const breadcrumb = [
@@ -120,37 +157,55 @@ breadcrumb.push({
   label: post.data.title,
 });
 ---
+
 {
   post.data.category === "works" ? (
     <WorkLayout
       title={post.data.title}
-      description={post.data.description}
-      projectType={projectTypeLabel}
+      description={
+        post.data.description
+      }
+      projectType={
+        projectTypeLabel
+      }
       year={post.data.year}
       role={post.data.role}
       image={post.data.image}
-      imageAlt={post.data.imageAlt}
+      imageAlt={
+        post.data.imageAlt
+      }
       headings={headings}
     >
       <Content />
     </WorkLayout>
   ) : (
     <ArticleLayout
-  title={post.data.title}
-  description={post.data.description}
-  category={categoryLabel}
-  date={post.data.publishedDate.toLocaleDateString(
-    "zh-TW"
-  )}
-  publishedDate={post.data.publishedDate}
-  readTime={post.data.readTime}
-      readTime={post.data.readTime}
+      title={post.data.title}
+      description={
+        post.data.description
+      }
+      category={categoryLabel}
+      date={post.data.publishedDate.toLocaleDateString(
+        "zh-TW"
+      )}
+      publishedDate={
+        post.data.publishedDate
+      }
+      readTime={
+        post.data.readTime
+      }
       breadcrumb={breadcrumb}
       headings={headings}
       image={post.data.image}
-      imageAlt={post.data.imageAlt}
-      previousArticle={previousArticle}
-      nextArticle={nextArticle}
+      imageAlt={
+        post.data.imageAlt
+      }
+      previousArticle={
+        previousArticle
+      }
+      nextArticle={
+        nextArticle
+      }
     >
       <Content />
     </ArticleLayout>
