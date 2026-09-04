@@ -35,6 +35,10 @@ const tocHeadings = headings.filter(
   (heading) => heading.depth === 2
 );
 
+const projectTypeLabel = projectType
+  .replace(/-/g, " ")
+  .toUpperCase();
+
 const base = import.meta.env.BASE_URL.endsWith("/")
   ? import.meta.env.BASE_URL
   : `${import.meta.env.BASE_URL}/`;
@@ -49,6 +53,9 @@ const base = import.meta.env.BASE_URL.endsWith("/")
 >
   <main class="work-page">
 
+    <!-- ========================================
+         HERO
+    ========================================= -->
     <section class="work-hero">
       <div class="container">
 
@@ -65,8 +72,8 @@ const base = import.meta.env.BASE_URL.endsWith("/")
               <span aria-hidden="true">/</span>
 
               <a href={`${base}works/`}>
-  WORKS
-</a>
+                WORKS
+              </a>
             </li>
 
             <li>
@@ -82,15 +89,19 @@ const base = import.meta.env.BASE_URL.endsWith("/")
         <div class="work-heading">
 
           <div class="work-title">
+
             <p class="work-type">
-              {projectType}
+              {projectTypeLabel}
             </p>
 
-            <h1>{title}</h1>
+            <h1>
+              {title}
+            </h1>
 
             <p class="work-description">
               {description}
             </p>
+
           </div>
 
           <dl class="work-meta">
@@ -120,10 +131,14 @@ const base = import.meta.env.BASE_URL.endsWith("/")
       </div>
     </section>
 
+    <!-- ========================================
+         COVER
+    ========================================= -->
     {
       image && (
         <section class="work-cover">
           <div class="container">
+
             <Image
               src={image}
               alt={imageAlt}
@@ -132,48 +147,118 @@ const base = import.meta.env.BASE_URL.endsWith("/")
               loading="eager"
               fetchpriority="high"
             />
+
           </div>
         </section>
       )
     }
 
+    <!-- ========================================
+         CONTENT
+    ========================================= -->
     <section class="work-content">
+
       <div class="container work-content-inner">
 
-        <aside class="work-index">
-  <p class="work-index-title">
-    CASE STUDY
-  </p>
+        {
+  tocHeadings.length > 0 && (
+    <aside class="work-index">
 
-  <nav aria-label="Case Study 目錄">
-    <ol>
-      {
-        tocHeadings.map((heading, index) => (
-          <li>
-            <a href={`#${heading.slug}`}>
-              <span class="work-index-number">
-                {String(index + 1).padStart(2, "0")}
-              </span>
+      <!-- Desktop / Tablet -->
+      <div class="work-index-desktop">
 
-              <span>
-                {heading.text}
-              </span>
-            </a>
-          </li>
-        ))
-      }
-    </ol>
-  </nav>
-</aside>
+        <p class="work-index-title">
+          CASE STUDY
+        </p>
+
+        <nav
+          class="work-index-nav"
+          aria-label="Case Study 目錄"
+        >
+          <ol>
+            {
+              tocHeadings.map((heading, index) => (
+                <li>
+                  <a href={`#${heading.slug}`}>
+
+                    <span class="work-index-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <span class="work-index-text">
+                      {heading.text}
+                    </span>
+
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+
+      </div>
+
+      <!-- Mobile -->
+      <details class="work-index-mobile">
+
+        <summary>
+          <span>CASE STUDY</span>
+
+          <span class="work-index-toggle">
+            CONTENTS
+            <span
+              class="work-index-arrow"
+              aria-hidden="true"
+            >
+              ↓
+            </span>
+          </span>
+        </summary>
+
+        <nav
+          class="work-index-mobile-nav"
+          aria-label="Case Study 目錄"
+        >
+          <ol>
+            {
+              tocHeadings.map((heading, index) => (
+                <li>
+                  <a href={`#${heading.slug}`}>
+
+                    <span class="work-index-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <span class="work-index-text">
+                      {heading.text}
+                    </span>
+
+                  </a>
+                </li>
+              ))
+            }
+          </ol>
+        </nav>
+
+      </details>
+
+    </aside>
+  )
+}
 
         <article class="work-article">
           <slot />
         </article>
 
       </div>
+
     </section>
 
+    <!-- ========================================
+         BACK
+    ========================================= -->
     <section class="back-to-works">
+
       <div class="container">
 
         <a href={`${base}works/`}>
@@ -185,18 +270,24 @@ const base = import.meta.env.BASE_URL.endsWith("/")
         </a>
 
       </div>
+
     </section>
 
   </main>
 </Layout>
 
 <style>
+  /* ========================================
+     HERO
+  ========================================= */
+
   .work-hero {
-    padding-block: var(--space-6);
+    padding-top: var(--space-5);
+    padding-bottom: var(--space-6);
   }
 
   .breadcrumb {
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-5);
   }
 
   .breadcrumb ol {
@@ -232,12 +323,20 @@ const base = import.meta.env.BASE_URL.endsWith("/")
     display: grid;
 
     grid-template-columns:
-      minmax(0, 1.5fr)
-      minmax(240px, 0.5fr);
+      minmax(0, 1.6fr)
+      minmax(220px, 0.55fr);
 
     align-items: end;
 
-    gap: var(--space-6);
+    gap: clamp(
+      var(--space-4),
+      6vw,
+      var(--space-7)
+    );
+  }
+
+  .work-title {
+    min-width: 0;
   }
 
   .work-type {
@@ -250,34 +349,40 @@ const base = import.meta.env.BASE_URL.endsWith("/")
   }
 
   .work-title h1 {
-    max-width: 760px;
+    max-width: 820px;
 
     margin-bottom: var(--space-3);
 
     font-family: var(--font-display);
 
     font-size: clamp(
-      3.5rem,
-      7vw,
-      6rem
+      3rem,
+      4.8vw,
+      4.75rem
     );
 
     font-weight: 400;
-    line-height: 0.95;
-    letter-spacing: -0.04em;
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+
+    text-wrap: balance;
+    line-break: strict;
   }
 
   .work-description {
-    max-width: 620px;
+    max-width: 680px;
 
     margin-bottom: 0;
 
     color: var(--color-text-muted);
 
     font-size: 1rem;
+    line-height: 1.85;
   }
 
   .work-meta {
+    width: 100%;
+
     margin: 0;
 
     display: grid;
@@ -293,7 +398,7 @@ const base = import.meta.env.BASE_URL.endsWith("/")
   }
 
   .work-meta dt {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.35rem;
 
     color: var(--color-text-muted);
 
@@ -309,16 +414,30 @@ const base = import.meta.env.BASE_URL.endsWith("/")
     line-height: 1.6;
   }
 
+  /* ========================================
+     COVER
+  ========================================= */
+
   .work-cover {
     padding-bottom: var(--space-7);
   }
 
- .work-cover :global(img) {
-  width: 100%;
-  height: clamp(420px, 55vw, 760px);
-  object-fit: cover;
-  object-position: center;
-}
+  .work-cover :global(img) {
+    width: 100%;
+
+    height: clamp(
+      420px,
+      55vw,
+      760px
+    );
+
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* ========================================
+     CONTENT
+  ========================================= */
 
   .work-content {
     padding-block: var(--space-7);
@@ -328,83 +447,141 @@ const base = import.meta.env.BASE_URL.endsWith("/")
   }
 
   .work-content-inner {
-  display: grid;
-  grid-template-columns:
-    180px
-    minmax(0, 680px);
+    display: grid;
 
-  justify-content: center;
-  align-items: start;
+    grid-template-columns:
+      210px
+      minmax(0, 720px);
 
-  gap: var(--space-6);
+    justify-content: center;
+    align-items: start;
+
+    gap: clamp(
+      var(--space-4),
+      5vw,
+      var(--space-7)
+    );
+  }
+
+  /* ========================================
+     CASE STUDY INDEX
+  ========================================= */
+.work-index-mobile {
+  display: none;
 }
+  .work-index {
+    position: sticky;
 
-.work-index {
-  position: sticky;
-  top: var(--space-4);
-  align-self: start;
+    top: var(--space-3);
 
-  min-width: 0;
+    align-self: start;
 
-  padding-top: 0.4rem;
+    min-width: 0;
+    max-height: calc(100vh - var(--space-6));
 
-  z-index: 2;
-}
+    padding-top: 0.4rem;
 
-.work-index-title {
-  margin-bottom: var(--space-2);
+    overflow: hidden;
 
-  color: var(--color-text-muted);
+    z-index: 2;
+  }
 
-  font-size: 0.65rem;
-  letter-spacing: 0.14em;
-}
-
-.work-index ol {
-  display: grid;
-  gap: var(--space-1);
-}
-
-.work-index a {
-  display: grid;
-
-  grid-template-columns:
-    24px minmax(0, 1fr);
-
-  gap: 0.4rem;
-
-  color: var(--color-text-muted);
-
-  font-size: 0.75rem;
-  line-height: 1.5;
-
-  transition:
-    color var(--transition-base);
-}
-
-.work-index a:hover {
-  color: var(--color-works);
-}
-
-.work-index-number {
-  color: var(--color-works);
-
-  font-size: 0.65rem;
-  letter-spacing: 0.06em;
-}
-
- .work-article {
-  min-width: 0;
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-}
-
-  .work-article :global(h2) {
-    margin-top: var(--space-6);
+  .work-index-title {
     margin-bottom: var(--space-2);
 
-    font-size: 2rem;
+    color: var(--color-text-muted);
+
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+  }
+
+  .work-index-nav {
+    max-height: calc(
+      100vh - 7rem
+    );
+
+    padding-right: 0.5rem;
+
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    scrollbar-width: thin;
+  }
+
+  .work-index ol {
+    display: grid;
+
+    gap: 0.15rem;
+  }
+
+  .work-index li {
+    min-width: 0;
+  }
+
+  .work-index a {
+    display: grid;
+
+    grid-template-columns:
+      24px
+      minmax(0, 1fr);
+
+    align-items: start;
+
+    gap: 0.45rem;
+
+    padding-block: 0.22rem;
+
+    color: var(--color-text-muted);
+
+    font-size: 0.72rem;
+    line-height: 1.45;
+
+    transition:
+      color var(--transition-base);
+  }
+
+  .work-index a:hover {
+    color: var(--color-works);
+  }
+
+  .work-index-number {
+    color: var(--color-works);
+
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+  }
+
+  .work-index-text {
+    min-width: 0;
+
+    overflow-wrap: anywhere;
+  }
+
+  /* ========================================
+     ARTICLE
+  ========================================= */
+
+  .work-article {
+    min-width: 0;
+
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .work-article :global(h2) {
+    margin-top: var(--space-7);
+    margin-bottom: var(--space-2);
+
+    scroll-margin-top: var(--space-4);
+
+    font-size: clamp(
+      1.65rem,
+      2.4vw,
+      2rem
+    );
+
+    line-height: 1.4;
+    letter-spacing: -0.015em;
   }
 
   .work-article :global(h2:first-child) {
@@ -414,12 +591,34 @@ const base = import.meta.env.BASE_URL.endsWith("/")
   .work-article :global(h3) {
     margin-top: var(--space-4);
     margin-bottom: var(--space-2);
+
+    font-size: 1.3rem;
+    line-height: 1.5;
   }
 
   .work-article :global(p) {
     margin-bottom: var(--space-3);
 
     line-height: 2;
+  }
+
+  .work-article :global(blockquote) {
+    margin:
+      var(--space-4)
+      0;
+
+    padding:
+      var(--space-2)
+      var(--space-3);
+
+    border-left: 2px solid
+      var(--color-works);
+
+    color: var(--color-text-muted);
+  }
+
+  .work-article :global(blockquote p:last-child) {
+    margin-bottom: 0;
   }
 
   .work-article :global(img) {
@@ -431,6 +630,7 @@ const base = import.meta.env.BASE_URL.endsWith("/")
   .work-article :global(ul),
   .work-article :global(ol) {
     margin-bottom: var(--space-3);
+
     padding-left: 1.25rem;
   }
 
@@ -438,7 +638,26 @@ const base = import.meta.env.BASE_URL.endsWith("/")
     margin-bottom: 0.5rem;
 
     list-style: inherit;
+
+    line-height: 1.8;
   }
+
+  .work-article :global(pre) {
+    max-width: 100%;
+
+    margin-block: var(--space-4);
+    padding: var(--space-3);
+
+    overflow-x: auto;
+  }
+
+  .work-article :global(code) {
+    overflow-wrap: anywhere;
+  }
+
+  /* ========================================
+     BACK TO WORKS
+  ========================================= */
 
   .back-to-works {
     padding-block: var(--space-5);
@@ -466,11 +685,26 @@ const base = import.meta.env.BASE_URL.endsWith("/")
     color: var(--color-works);
   }
 
-  @media (max-width: 900px) {
+  /* ========================================
+     TABLET
+  ========================================= */
+
+  @media (max-width: 1024px) {
+
     .work-heading {
       grid-template-columns: 1fr;
 
       gap: var(--space-4);
+    }
+
+    .work-title h1 {
+      max-width: 760px;
+
+      font-size: clamp(
+        3rem,
+        7vw,
+        4.25rem
+      );
     }
 
     .work-meta {
@@ -479,36 +713,99 @@ const base = import.meta.env.BASE_URL.endsWith("/")
     }
 
     .work-content-inner {
-      grid-template-columns:
-        150px minmax(0, 1fr);
+      grid-template-columns: 1fr;
 
-      gap: var(--space-4);
+      gap: var(--space-5);
     }
+
+    /*
+      Tablet 開始不再使用左側 Sticky TOC。
+      避免長目錄和正文互相干擾。
+    */
+    .work-index {
+      position: static;
+
+      max-height: none;
+
+      padding-top: 0;
+      padding-bottom: var(--space-3);
+
+      overflow: visible;
+
+      border-bottom: 1px solid
+        var(--color-border);
+    }
+
+    .work-index-nav {
+      max-height: none;
+
+      padding-right: 0;
+
+      overflow: visible;
+    }
+
+    .work-index ol {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+}
   }
 
+  /* ========================================
+     MOBILE
+  ========================================= */
+
   @media (max-width: 767px) {
+
     .work-hero {
-      padding-block: var(--space-4);
+      padding-top: var(--space-3);
+      padding-bottom: var(--space-5);
     }
 
     .breadcrumb {
       margin-bottom: var(--space-4);
     }
 
+    .work-heading {
+      gap: var(--space-4);
+    }
+
     .work-title h1 {
+      max-width: 100%;
+
+      margin-bottom: var(--space-2);
+
       font-size: clamp(
-        3rem,
-        14vw,
-        4.25rem
+        2.35rem,
+        10.5vw,
+        3.25rem
       );
+
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+
+      text-wrap: pretty;
+    }
+
+    .work-description {
+      font-size: 0.95rem;
+      line-height: 1.8;
     }
 
     .work-meta {
       grid-template-columns: 1fr;
+
+      gap: var(--space-2);
     }
 
     .work-cover {
       padding-bottom: var(--space-5);
+    }
+
+    .work-cover :global(img) {
+      height: auto;
+
+      aspect-ratio: 4 / 3;
     }
 
     .work-content {
@@ -516,25 +813,157 @@ const base = import.meta.env.BASE_URL.endsWith("/")
     }
 
     .work-content-inner {
-      grid-template-columns: 1fr;
-
       gap: var(--space-4);
     }
 
-    .work-index {
-      padding-bottom: var(--space-2);
+    /*
+  Mobile Case Study 目錄
+  改為可展開 / 收合式目錄
+*/
+.work-index {
+  width: 100%;
 
-      border-bottom: 1px solid
-        var(--color-border);
-    }
+  padding: 0;
 
-    .work-article :global(h2) {
+  border-bottom: 0;
+}
+
+.work-index-desktop {
+  display: none;
+}
+
+.work-index-mobile {
+  display: block;
+
+  width: 100%;
+
+  border-top: 1px solid
+    var(--color-border);
+
+  border-bottom: 1px solid
+    var(--color-border);
+}
+
+.work-index-mobile summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: var(--space-2);
+
+  padding-block: var(--space-2);
+
+  color: var(--color-text-muted);
+
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+
+  cursor: pointer;
+
+  list-style: none;
+}
+
+.work-index-mobile summary::-webkit-details-marker {
+  display: none;
+}
+
+.work-index-toggle {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 0.5rem;
+}
+
+.work-index-arrow {
+  display: inline-block;
+
+  font-size: 0.85rem;
+
+  transition:
+    transform var(--transition-base);
+}
+
+.work-index-mobile[open]
+.work-index-arrow {
+  transform: rotate(180deg);
+}
+
+.work-index-mobile-nav {
+  padding:
+    var(--space-1)
+    0
+    var(--space-3);
+}
+
+.work-index-mobile-nav ol {
+  display: grid;
+
+  width: 100%;
+
+  gap: 0;
+}
+
+.work-index-mobile-nav li {
+  width: 100%;
+}
+
+.work-index-mobile-nav a {
+  display: grid;
+
+  grid-template-columns:
+    2rem
+    minmax(0, 1fr);
+
+  align-items: start;
+
+  gap: 0.5rem;
+
+  width: 100%;
+
+  padding-block: 0.6rem;
+
+  border-top: 1px solid
+    var(--color-border);
+
+  color: var(--color-text-muted);
+
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.work-index-mobile-nav
+.work-index-number {
+  padding-top: 0.05rem;
+
+  color: var(--color-works);
+
+  font-size: 0.65rem;
+}
+
+.work-index-mobile-nav
+.work-index-text {
+  overflow: visible;
+
+  white-space: normal;
+  text-overflow: unset;
+  overflow-wrap: normal;
+}
+.work-article :global(h2) {
   margin-top: var(--space-6);
   margin-bottom: var(--space-2);
 
   scroll-margin-top: var(--space-4);
 
-  font-size: 2rem;
+  font-size: 1.55rem;
+  line-height: 1.45;
 }
+
+    .work-article :global(h3) {
+      font-size: 1.2rem;
+    }
+
+    .work-article :global(p) {
+      line-height: 1.9;
+    }
   }
 </style>

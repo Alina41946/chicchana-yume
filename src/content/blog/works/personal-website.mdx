@@ -1,83 +1,762 @@
 ---
-title: 'Personal Website'
-description: '從資訊架構、UI 設計到 Astro 開發，建立屬於自己的個人網站與內容平台。'
+title: 'Vibe Coding：從 0 開始做自己的個人網站'
+description: '從網站定位、UI 設計、Astro 開發到 GitHub Pages 部署，記錄我如何透過 Vibe Coding 一步一步完成自己的個人網站。'
 category: 'works'
-publishedDate: 2026-08-31
-readTime: '5 min read'
-
-image: '../../../assets/images/works/personal-website/cover.jpg'
-imageAlt: 'Personal Website 個人網站設計'
-
-projectType: 'web-development'
+publishedDate: 2026-09-04
+readTime: '15 min read'
+projectType: 'personal-project'
 year: 2026
-role: 'UI Design / Front-end Development'
-
+role: 'Planning / UI Design / Vibe Coding'
+image: '../../../assets/images/works/personal-website/cover.jpg'
+imageAlt: 'Vibe Coding 個人網站設計與開發'
 draft: false
 ---
 
-import WorkImage from '../../../components/WorkImage.astro';
 import WorkWideImage from '../../../components/WorkWideImage.astro';
-import WorkImageGrid from '../../../components/WorkImageGrid.astro';
 
-import overviewImage from '../../../assets/images/works/personal-website/overview.jpg';
-import uiDesignImage from '../../../assets/images/works/personal-website/ui-design.jpg';
-import desktopImage from '../../../assets/images/works/personal-website/desktop.jpg';
-import mobileImage from '../../../assets/images/works/personal-website/mobile.jpg';
+import vibeCodingFlow from '../../../assets/images/works/personal-website/vibe-coding-flow.jpg';
+import githubPagesDebug from '../../../assets/images/works/personal-website/github-pages-debug.jpg';
+import vibeCodingLoop from '../../../assets/images/works/personal-website/vibe-coding-loop.jpg';
 
-## Overview
+## Vibe Coding 自己的網站
 
-這是一個從零開始建立的個人網站。
+這次我想做一個真正屬於自己的網站。
 
-網站不只是作品集，也希望成為記錄語言學習、日本生活、台灣旅行與設計作品的長期內容平台。
+不是直接套用現成模板，也不是先把 Astro 從頭學完才開始，而是先從「我想做什麼」出發，再透過 AI 協助，一步一步把想法變成真正可以使用的網站。
 
-<WorkImage
-  src={overviewImage}
-  alt="Personal Website 首頁設計"
-  caption="Personal Website 首頁設計"
-/>
+整個製作方式很接近現在常說的 **Vibe Coding**。
 
-## Challenge
+我負責決定網站要做什麼、內容怎麼安排、畫面喜不喜歡、哪些功能應該留下；遇到不知道怎麼實作的地方，再透過 AI 協助拆解問題、產生程式碼、除錯與調整。
 
-一開始最大的問題不是視覺設計，而是內容很多，包含語言學習、日本 Working Holiday、台灣旅行與作品集。
+最後從一個很模糊的想法，一路做到真正部署在 GitHub Pages 上的網站。
 
-如果只是把所有內容全部放在首頁，很容易變得雜亂，因此需要先重新整理資訊架構與內容層級。
-
-## Process
-
-我先從網站資訊架構開始，整理主要內容分類與使用者瀏覽路徑，再進行 Wireframe、視覺方向與頁面設計。
-
-之後使用 Astro 開始前端開發，並逐步建立共用元件、響應式版面與 Content Collection。
+這篇文章就按照實際製作順序，記錄我是怎麼一步一步把它做出來的。
 
 <WorkWideImage
-  src={uiDesignImage}
-  alt="Personal Website UI 設計"
-  caption="從資訊架構、版面規劃到 UI Design"
+  src={vibeCodingFlow}
+  alt="Vibe Coding 個人網站從規劃、設計、開發到部署的完整製作流程"
 />
 
-## Solution
+---
 
-網站最後分成 Language、Japan WH、Taiwan、Works 等主要內容。
+## STEP 01｜先決定「我要做什麼網站」
 
-文章使用 Content Collection 管理，而作品則另外建立 Case Study Layout，讓一般文章與作品集有不同的閱讀方式。
+第一步不是寫程式，而是先決定這個網站到底要拿來做什麼。
 
-同時透過共用元件減少重複程式碼，讓之後新增文章或作品時不需要重新製作整個頁面。
+最初我想放進網站的內容包括：
 
-## Result
+- 自學語言
+- 日本 Working Holiday
+- 台灣旅行
+- 設計作品
+- About
 
-目前網站已建立首頁、文章系統、Language 分類與 Works Case Study 基礎架構，並持續加入實際內容。
+網站名稱則決定使用：
 
-<WorkImageGrid caption="Desktop 與 Mobile 響應式設計">
-  <WorkImage
-    src={desktopImage}
-    alt="Personal Website Desktop 版面"
-  />
+> ちっちゃな私には、ちっちゃな夢があります。
 
-  <WorkImage
-    src={mobileImage}
-    alt="Personal Website Mobile 版面"
-  />
-</WorkImageGrid>
+這一步最重要的不是技術，而是先把「我要做的是什麼網站」整理清楚。
 
-## What I Learned
+如果連內容與方向都還沒有決定，就直接要求 AI 幫忙做網站，最後很容易只得到一個看起來完整，實際上卻不符合自己需求的模板。
 
-這個專案讓我不只是在製作單一網站畫面，而是開始思考內容結構、元件共用、響應式設計，以及未來網站如何持續擴充與維護。
+---
+
+## STEP 02｜整理網站架構
+
+確定網站方向之後，第二步開始整理網站的 Information Architecture。
+
+最初規劃的主要內容包含：
+
+- HOME
+- LANGUAGE
+- JAPAN WH
+- TAIWAN
+- WORKS
+- ABOUT
+
+Language 再細分成 Japanese 與 Korean。
+
+Taiwan 則希望未來可以依照台灣不同地區整理旅行文章。
+
+這個階段開始思考：
+
+- 首頁要先看到什麼？
+- Language 要不要再分類？
+- Taiwan 要怎麼依地區瀏覽？
+- Works 要不要跟一般文章放在一起？
+- 使用者要怎麼進入每一篇文章？
+
+先決定網站「有哪些地方」，再開始思考畫面。
+
+---
+
+## STEP 03｜User Flow → Low-Fi → Hi-Fi
+
+網站架構確定之後，我沒有直接進入 Coding。
+
+而是先完成：
+
+1. User Flow
+2. Low-Fi Wireframe
+3. Visual Direction
+4. Hi-Fi UI
+
+這個階段主要確認資訊層級與使用流程。
+
+首頁的內容也逐漸確定為：
+
+```text
+Hero
+↓
+Explore
+↓
+Language
+↓
+Japan WH
+↓
+Taiwan
+↓
+About
+↓
+Newsletter
+```
+
+等到整體方向確定之後，才真正開始把 Figma 裡的設計做成網站。
+
+---
+
+## STEP 04｜決定使用 Astro
+
+接下來才開始決定網站要使用什麼技術。
+
+我的需求主要是：
+
+- 網站會有很多文章
+- 以內容閱讀為主
+- 不需要複雜的後端
+- 希望自己控制 HTML 與 CSS
+- 未來可以持續新增文章
+- 可以部署到 GitHub Pages
+
+最後決定使用：
+
+**Astro + GitHub Pages**
+
+建立 Astro 專案之後，網站才正式從設計稿進入程式開發。
+
+```bash
+npm create astro@latest
+```
+
+我沒有先把 Astro 所有功能學完。
+
+而是先建立專案，再根據接下來真正需要的功能，一邊做、一邊理解。
+
+---
+
+## STEP 05｜先建立網站的基礎樣式
+
+正式製作頁面之前，我先把網站會重複使用的樣式整理出來。
+
+包含：
+
+- Background
+- Text Color
+- Accent Color
+- Spacing
+- Container Width
+- Typography
+- Responsive Breakpoints
+
+這些設定主要集中在：
+
+```text
+src/styles/tokens.css
+src/styles/global.css
+```
+
+不同內容也使用不同的 Accent Color：
+
+- Language → Blue
+- Japan → Red / Pink
+- Taiwan → Teal
+- Travel → Yellow
+- Works → Gray
+
+先把這些基礎規則建立起來，後面製作 Component 時就不需要每次重新決定一次。
+
+---
+
+## STEP 06｜把首頁一個區塊一個區塊做出來
+
+接著開始製作首頁。
+
+我沒有一次要求 AI 把整個首頁全部寫完，而是拆成不同 Component：
+
+```text
+Header
+↓
+Hero
+↓
+ExploreSection
+↓
+LanguageSection
+↓
+JapanDiarySection
+↓
+TaiwanSection
+↓
+AboutTeaser
+↓
+Newsletter
+↓
+Footer
+```
+
+每完成一個區塊，就先放進瀏覽器確認。
+
+如果畫面不符合原本想要的感覺，就繼續調整；確認沒有問題之後，再進入下一個 Component。
+
+這也是我在這次 Vibe Coding 過程中逐漸建立的方式：
+
+> 不要一次叫 AI 寫完整個網站，而是把問題拆成可以確認的小步驟。
+
+---
+
+## STEP 07｜開始處理 Responsive Design
+
+Desktop 有基本樣子之後，接著開始測試不同螢幕尺寸。
+
+主要確認：
+
+```text
+1440px → Desktop
+1024px → Tablet
+390px  → Mobile
+```
+
+除了確認有沒有爆版，也會實際檢查：
+
+- 三欄什麼時候應該變兩欄？
+- Mobile 是否需要改成單欄？
+- 圖片比例是否合理？
+- Header 什麼時候切換成 Hamburger Menu？
+- Tablet 的留白會不會太多？
+- 文字與圖片的比例在 Mobile 是否仍然舒服？
+
+這個過程也讓我發現，RWD 並不是單純把 Desktop 的三欄改成 Mobile 的一欄。
+
+不同尺寸仍然需要重新判斷畫面的資訊比例。
+
+---
+
+## STEP 08｜導入 Astro Content Collections
+
+做到文章功能之後，很快就遇到一個問題：
+
+**如果每新增一篇文章，都要自己建立一個新的 Astro Page，之後文章越來越多會很難維護。**
+
+因此開始導入 Astro Content Collections。
+
+文章內容統一放在：
+
+```text
+src/content/blog/
+├─ language/
+├─ japan-wh/
+├─ taiwan/
+└─ works/
+```
+
+一般文章使用 Markdown：
+
+```text
+.md
+```
+
+Portfolio / Case Study 則使用 MDX：
+
+```text
+.mdx
+```
+
+例如：
+
+```text
+src/content/blog/language/japanese/jlpt-n2.md
+```
+
+每篇文章再透過 Frontmatter 保存基本資料：
+
+```yaml
+---
+title: 'JLPT N2 自學準備方法'
+description: '整理我的 N2 準備計畫、使用教材與實際學習方式。'
+category: 'language'
+subcategory: 'japanese'
+publishedDate: 2026-08-31
+readTime: '8 min read'
+draft: false
+---
+```
+
+做到這一步之後，「新增內容」和「修改網站」終於被分開。
+
+之後寫新文章，不需要再修改首頁或重新建立 Astro Page。
+
+---
+
+## STEP 09｜建立統一的文章頁面
+
+有了 Content Collections 之後，下一步是建立統一的 Article Layout。
+
+文章頁陸續加入：
+
+- Breadcrumb
+- Title
+- Description
+- Published Date
+- Read Time
+- Cover Image
+- Table of Contents
+- Article Body
+- Previous / Next
+- Responsive Layout
+
+之後每一篇文章只需要專心寫 Markdown。
+
+例如：
+
+```md
+---
+title: '文章標題'
+description: '文章摘要'
+category: 'language'
+publishedDate: 2026-09-04
+readTime: '5 min read'
+draft: true
+---
+
+## 第一個標題
+
+文章內容。
+
+## 第二個標題
+
+文章內容。
+```
+
+文章版型則全部交給 Astro Layout 處理。
+
+---
+
+## STEP 10｜Taiwan 加入 Region Filter
+
+Taiwan 一開始只是一般的文章列表。
+
+但開始思考未來的旅行文章之後，我希望使用者可以依照不同地區瀏覽：
+
+- North
+- Central
+- South
+- East
+- Islands
+
+一開始有考慮過替每個 Region 建立獨立頁面。
+
+後來重新思考之後，決定不需要為了分類建立大量結構相似的頁面。
+
+最後改成使用 Query Parameter：
+
+```text
+/taiwan/?region=north
+/taiwan/?region=central
+/taiwan/?region=south
+/taiwan/?region=east
+/taiwan/?region=islands
+```
+
+首頁的 Taiwan 區塊也可以直接連到對應 Region。
+
+這也是 Vibe Coding 過程中很常發生的事情：
+
+> 第一個想到的做法，不代表一定要做到最後。
+
+實際做到功能時，再根據使用方式重新調整架構。
+
+---
+
+## STEP 11｜重新思考 Works 要不要公開
+
+網站做到後期，我重新思考了一次 Works 的定位。
+
+這個網站主要還是：
+
+- 語言學習
+- 日本 Working Holiday
+- 台灣旅行
+
+如果把 Works 直接放在主要 Navigation，一般訪客不一定需要看到。
+
+但另一方面，我又希望求職或面試時，可以直接把這個網站當成自己的 Portfolio。
+
+最後決定製作：
+
+**Portfolio Mode**
+
+一般訪客看到：
+
+```text
+HOME
+LANGUAGE
+JAPAN WH
+TAIWAN
+ABOUT
+```
+
+需要 Portfolio 時，則透過：
+
+```text
+/works/?portfolio=1
+```
+
+進入網站。
+
+Portfolio Mode 啟用後：
+
+```text
+Header
+→ PORTFOLIO ↗
+
+Explore
+→ 04 PORTFOLIO
+
+Footer
+→ PORTFOLIO ↗
+```
+
+並利用 `sessionStorage`，讓使用者在同一個瀏覽器分頁繼續瀏覽網站時，Portfolio Mode 可以保持啟用。
+
+Works 同時排除：
+
+- Sitemap
+- RSS
+- Articles Archive
+- 一般公開 Navigation
+
+作品頁則加入：
+
+```html
+<meta name="robots" content="noindex, nofollow" />
+```
+
+這不是密碼保護，而是把 Works 做成一個 **Unlisted Portfolio**。
+
+---
+
+## STEP 12｜補上網站的 SEO 與基礎功能
+
+主要畫面與文章功能完成之後，開始補正式網站需要的基礎設定。
+
+包含：
+
+- Meta Title
+- Meta Description
+- Canonical URL
+- Open Graph
+- RSS
+- Sitemap
+- robots.txt
+- 404 Page
+- Image Optimization
+- Lazy Loading
+
+這些東西不會直接出現在 Figma 的畫面裡，但網站真正準備公開時，就變成不能忽略的部分。
+
+---
+
+## STEP 13｜部署到 GitHub Pages
+
+網站完成到一定程度後，開始準備正式部署。
+
+使用：
+
+```text
+GitHub
++
+GitHub Actions
++
+GitHub Pages
+```
+
+部署流程變成：
+
+```text
+Local Development
+↓
+Git Commit
+↓
+Git Push
+↓
+GitHub Actions
+↓
+Astro Build
+↓
+GitHub Pages
+```
+
+之後只要 Push 到 GitHub，GitHub Actions 就會自動 Build 並部署網站。
+
+第一次看到 GitHub Actions 成功時，我原本以為網站終於完成了。
+
+結果打開正式網站、點擊 Navigation：
+
+**404。**
+
+---
+
+## STEP 14｜解決 GitHub Pages Base Path
+
+本機開發時，網站是：
+
+```text
+localhost:4321/
+```
+
+但 GitHub Pages 實際部署的位置是：
+
+```text
+/chicchana-yume/
+```
+
+因此原本部分 URL 最後被組成：
+
+```text
+/chicchana-yumelanguage/
+```
+
+正確網址其實應該是：
+
+```text
+/chicchana-yume/language/
+```
+
+最後統一處理 `BASE_URL`：
+
+```js
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+```
+
+再逐一檢查 Header、Footer、文章列表、分類頁、Layout，以及其他有使用 Base Path 的地方。
+
+<WorkWideImage
+  src={githubPagesDebug}
+  alt="GitHub Pages 404 與 Base Path 問題的排查及解決流程"
+/>
+
+這也是這次開發中很典型的一個循環：
+
+```text
+AI 協助產生程式碼
+↓
+本機測試
+↓
+看起來正常
+↓
+正式部署
+↓
+發現問題
+↓
+找出原因
+↓
+修改
+↓
+重新 Build
+↓
+再次部署
+```
+
+Vibe Coding 並不是「AI 把程式碼生成出來就完成」。
+
+實際上，後面的測試、判斷與修正仍然非常重要。
+
+---
+
+## STEP 15｜上線後開始清理程式
+
+網站成功部署之後，我沒有馬上繼續增加新功能。
+
+反而開始做：
+
+**Project Cleanup**
+
+開發過程中，有些 Component 因為網站架構改變，後來已經沒有使用。
+
+透過專案搜尋與 Reference 檢查，最後移除：
+
+```text
+WorksSection.astro
+ProjectCard.astro
+JapanDiaryCard.astro
+```
+
+同時重新檢查：
+
+- Portfolio Mode Script
+- 舊 CSS
+- Article Category
+- RSS
+- Sitemap
+- Public Navigation
+
+清理完成後，再執行：
+
+```bash
+npm run build
+```
+
+確認 Build 仍然成功。
+
+這一步也讓網站從「可以跑」進一步整理成比較乾淨、容易繼續維護的狀態。
+
+---
+
+## STEP 16｜從「開發網站」進入「使用網站」
+
+做到這裡之後，我決定暫時停止增加新的網站功能。
+
+目前已經完成：
+
+- Astro 基礎架構
+- Responsive Design
+- Content Collections
+- Markdown
+- MDX
+- Language
+- Japan WH
+- Taiwan Region Filter
+- Article Detail
+- Portfolio Mode
+- RSS
+- Sitemap
+- 404 Page
+- 基礎 SEO
+- GitHub Pages
+- GitHub Actions 自動部署
+- Project Cleanup
+
+接下來真正重要的事情，不是繼續增加 Component。
+
+而是：
+
+**開始寫內容。**
+
+現在新增一般文章的流程已經變成：
+
+```text
+新增 .md
+↓
+填寫 Frontmatter
+↓
+寫文章
+↓
+本機預覽
+↓
+draft: false
+↓
+Git Push
+↓
+自動部署
+```
+
+Portfolio 則使用：
+
+```text
+新增 .mdx
+↓
+加入作品圖片
+↓
+使用 WorkImage Components
+↓
+完成 Case Study
+↓
+Git Push
+↓
+自動部署
+```
+
+網站終於從一個一直在開發的 Project，變成一個我可以真正開始使用的網站。
+
+---
+
+## Vibe Coding 的實際流程
+
+回頭看這次的製作過程，我並不是：
+
+```text
+先學完 Astro
+↓
+先學完 Content Collections
+↓
+先學完 GitHub Actions
+↓
+開始做網站
+```
+
+實際上的順序更接近：
+
+```text
+有一個想法
+↓
+先決定自己要什麼
+↓
+詢問 AI
+↓
+取得實作方向
+↓
+自己判斷是否符合需求
+↓
+實作
+↓
+預覽
+↓
+發現問題
+↓
+把問題回饋給 AI
+↓
+修改
+↓
+再次測試
+↓
+繼續下一步
+```
+
+<WorkWideImage
+  src={vibeCodingLoop}
+  alt="Vibe Coding 從想法、詢問 AI、實作、預覽、發現問題到修改與再測試的工作循環"
+/>
+
+AI 確實讓寫程式的速度變快很多。
+
+但做到後面，我發現真正需要自己決定的問題反而越來越多。
+
+例如：
+
+- 這個功能真的需要嗎？
+- 這個版面真的好看嗎？
+- Taiwan 有必要建立五個頁面嗎？
+- Works 應該讓所有訪客看到嗎？
+- 這個 Component 還有存在的必要嗎？
+- AI 提供的方法真的適合目前的網站嗎？
+
+所以對我來說，這次 Vibe Coding 並不是單純：
+
+> 「叫 AI 幫我寫一個網站。」
+
+而比較像：
+
+> **我負責決定網站要往哪裡走，AI 幫助我把每一個不知道怎麼實現的步驟變成可以繼續往下做的事情。**
+
+最後，一個原本只有「我想做自己的網站」的想法，也真的一步一步變成了現在可以持續寫文章、放作品，並且正式部署在網路上的網站。
